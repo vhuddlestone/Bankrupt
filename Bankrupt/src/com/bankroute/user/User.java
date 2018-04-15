@@ -1,10 +1,12 @@
 package com.bankroute.user;
+import com.bankroute.bankaccount.BankAccount;
+import com.bankroute.datatools.SQLInteraction;
 import com.bankroute.tools.*;
 
 /**
  * Ce code représente la classe abstraite User.
  * Elle définit les éléments qui seront utilisés par les classes filles Banker et Customer
- *
+ * @author R.GASQUET // V.HUDDLESTONE // V. GRUIT
  */
 
 public abstract class User {
@@ -15,9 +17,38 @@ public abstract class User {
 	protected String mail;
 	protected String password;
 	protected int role;
+	protected AccountManagement accountManagement;
+	protected OperationManagement operationManagement;
+	protected SQLInteraction sqlInteraction;
 	
-	protected AccountManagement accountManagement = new CustomerAccountManagement();
-	protected OperationManagement operationmanagement = new ClientOperation();	
+	public User() {
+		this.address = "XXX";
+		this.firstName = "XXX";
+		this.lastName = "XXX";
+		this.mail = "XXX";
+		this.password = "XXX";
+		this.role = 1;
+	}
+	
+	public User(int id, String address, String firstName,
+			String lastName, String mail, String password, int role, SQLInteraction sqlInteraction) {
+		
+		this.id=id;
+		this.address = address;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.mail = mail;
+		this.password = password;
+		this.role = role;
+		this.sqlInteraction=sqlInteraction;
+		this.accountManagement = new CustomerAccountManagement(sqlInteraction);
+		this.operationManagement = new CustomerOperation();
+		
+	}
+	
+	/**
+	 * @return
+	 */
 	
 	public int getId() {
 		return id;
@@ -61,4 +92,5 @@ public abstract class User {
 	public void setRole(int role) {
 		this.role = role;
 	}
+	
 }
