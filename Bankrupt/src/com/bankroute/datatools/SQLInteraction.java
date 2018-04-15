@@ -12,19 +12,22 @@ public final class SQLInteraction {
 	String user;
 	String password;
 	String port;
-	Connection conn;
+	Connection conn=null;
+	String state;
 
-	SQLInteraction(String hostname, String user, String password, String port, String dbName) {
+	public SQLInteraction(String hostname, String user, String password, String port, String dbName) {
 		this.hostName = hostname;
 		this.user = user;
 		this.password = password;
 		this.port = port;
 		this.dbName = dbName;
-
+		this.state="unconnected";
+		
 		try {
 			conn = DriverManager.getConnection(
 					"jdbc:mysql://" + hostname + "/" + dbName + "?user=" + user + "&password=" + password);
 			System.out.println("Database connection OP");
+			this.state="connected";
 
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
@@ -44,5 +47,19 @@ public final class SQLInteraction {
 			System.out.println("VendorError: " + e.getErrorCode());
 		}
 		return rs;
+	}
+	
+	/**
+	 * @return the state
+	 */
+	public String getState() {
+		return state;
+	}
+
+	/**
+	 * @param state the state to set
+	 */
+	public void setState(String state) {
+		this.state = state;
 	}
 }
