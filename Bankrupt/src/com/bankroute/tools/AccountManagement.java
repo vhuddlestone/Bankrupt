@@ -10,4 +10,6 @@ public interface AccountManagement {
 	BankAccount createBankAccount(int customerID, int accountType);
 	BankAccount deleteBankAccount(BankAccount bankAccountToDelete);
 	Vector<User> getUser(int role);
+	Vector<User> getClientsFromBankerId(int id);
+	int getCouncillorIdFromClientId(int id);
 }

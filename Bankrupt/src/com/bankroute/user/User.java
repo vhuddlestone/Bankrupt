@@ -1,5 +1,6 @@
 package com.bankroute.user;
-import com.bankroute.bankaccount.BankAccount;
+import java.util.Vector;
+
 import com.bankroute.datatools.SQLInteraction;
 import com.bankroute.tools.*;
 
@@ -46,6 +47,7 @@ public abstract class User {
 		
 	}
 	
+	public abstract Vector<User> getCustomersInCharge();
 	/**
 	 * @return
 	 */
@@ -91,6 +93,12 @@ public abstract class User {
 	}
 	public void setRole(int role) {
 		this.role = role;
+	}
+	
+	@Override
+	public String toString(){
+		return "User: "+firstName + " "+lastName+" | role:"+role;
+		
 	}
 	
 }
