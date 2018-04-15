@@ -27,7 +27,7 @@ public abstract class User {
 		this.role = 1;
 	}
 	
-	public User(String address, String firstName,
+	public User(int ID, String address, String firstName,
 			String lastName, String mail, String password, int role,
 			AccountManagement accountManagement, OperationManagement operationManagement) {
 		

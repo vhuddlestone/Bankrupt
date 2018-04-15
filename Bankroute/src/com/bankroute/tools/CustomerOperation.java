@@ -5,27 +5,11 @@ import com.bankroute.bankaccount.BankAccount;
 public class CustomerOperation implements OperationManagement {
 
 	@Override
-	public double receiveMoney() {
+	public boolean makeOperation(double amount, BankAccount bankAccountSender, int numberAccountReceiver) {
 		// TODO Auto-generated method stub
-		return 0;
-	}
+		return false;
+	}	
+	
 
-	@Override
-	public BankAccount transferMoney(double amount, BankAccount account) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public BankAccount internalTransfert(double amount, BankAccount account) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String transactionLogs(String log) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

@@ -1,8 +1,8 @@
 package com.bankroute.bankaccount;
 
 public abstract class BankAccount {
-	double balance;
-	int accountNumber;
-	int customerID;
-	int accountType;
+	public double balance;
+	public int accountNumber;
+	public int customerID;
+	public int accountType;
 }
