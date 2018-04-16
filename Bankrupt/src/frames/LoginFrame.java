@@ -5,6 +5,10 @@ import com.bankroute.user.User;
 
 import static javax.swing.JOptionPane.*;
 
+import java.util.Vector;
+
+import javax.swing.table.DefaultTableModel;
+
 
 
 /*
@@ -61,7 +65,7 @@ public class LoginFrame extends javax.swing.JFrame {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				ConnectButtonActionPerformed(evt);
 			}
-		});
+		}); 
 
 		UserNameImput.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
 		UserNameImput.setName("UserNameImput"); // NOI18N
@@ -132,8 +136,10 @@ public class LoginFrame extends javax.swing.JFrame {
 			User currentUser = sQLInteraction.connectUser(UserNameImput.getText(), PasswordImput.getText());
 			if (currentUser != null) {
 				switch (currentUser.getRole()) {
-					case bankerRole:
+					case bankerRole: 
 						UserViewFrame userViewFrame=new UserViewFrame(currentUser);
+						userViewFrame.setVisible(true);
+						this.setVisible(false);
 						break;	
 				}
 			}
