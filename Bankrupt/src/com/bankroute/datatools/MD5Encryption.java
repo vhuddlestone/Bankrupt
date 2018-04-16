@@ -7,7 +7,7 @@ public final class MD5Encryption {
 	final static String format="%02x";
 	final static char addedArg=0xab;
 	
-	final static String encrypteString(String str) {
+	public final static String encrypteString(String str) {
 		String encryptedMessage="";
 		MessageDigest messageDisgest;
 		try {

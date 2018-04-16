@@ -43,7 +43,7 @@ public abstract class User {
 		this.role = role;
 		this.sqlInteraction=sqlInteraction;
 		this.accountManagement = new CustomerAccountManagement(sqlInteraction);
-		this.operationManagement = new CustomerOperation();
+		//this.operationManagement = new CustomerOperation();
 		
 	}
 	

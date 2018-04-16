@@ -16,8 +16,9 @@ public class Main {
 		String password = "";
 		String port = "";
 
-		SQLInteraction sqlInteraction= new SQLInteraction(hostName, user, password, port, dbName);		
-		
+		SQLInteraction sqlInteraction= new SQLInteraction(hostName, user, password, port, dbName);	
+		System.out.println("pwd:");
+		System.out.println("pwd:"+MD5Encryption.encrypteString("test"));
 		LoginFrame loginFrame= new LoginFrame(sqlInteraction);
 		loginFrame.setVisible(true);;
 	}
