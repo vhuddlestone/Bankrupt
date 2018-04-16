@@ -128,7 +128,4 @@ public class CustomerAccountManagement implements AccountManagement {
 		return councillor_id;
 	}
 
-
-
-
 }

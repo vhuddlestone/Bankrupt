@@ -134,7 +134,7 @@ public class LoginFrame extends javax.swing.JFrame {
 				switch (currentUser.getRole()) {
 					case bankerRole:
 						UserViewFrame userViewFrame=new UserViewFrame(currentUser);
-						break;
+						break;	
 				}
 			}
 
