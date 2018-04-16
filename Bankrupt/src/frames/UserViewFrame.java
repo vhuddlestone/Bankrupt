@@ -29,21 +29,12 @@ public class UserViewFrame extends javax.swing.JFrame {
 		Vector<User> vectUser = user.getCustomersInCharge();
 
 		String header[] = { "id", "firstname", "lastname", "password", "mail", "address", "role" ,""};
-		Object[] model = new Object[8];
-
+		
 		DefaultTableModel modelTable = new DefaultTableModel();
 		modelTable.setColumnIdentifiers(header);
-
-		JButton editButton=new JButton();
-		editButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-		editButton.setText("edit");
-		editButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				//todo
-			}
-		});
-		int i = 0;
+		
 		for (User customer : vectUser) {
+			Object[] model = new Object[8];
 			model[0] = customer.getId();
 			model[1] = customer.getFirstName();
 			model[2] = customer.getLastName();
@@ -51,14 +42,11 @@ public class UserViewFrame extends javax.swing.JFrame {
 			model[4] = customer.getMail();
 			model[5] = customer.getAddress();
 			model[6] = customer.getRole();
-			model[7]="";
-
+			
 			modelTable.addRow(model);
-			i++;
 		}
 	
 		UserTable.setModel(modelTable);
-		editButton.paint(getGraphics());
 	}
 
 	/**
@@ -86,7 +74,11 @@ public class UserViewFrame extends javax.swing.JFrame {
                 "id", "First name", "Last name", "Address", "Mail", "role"
             }
         ) {
-            Class[] types = new Class [] {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
