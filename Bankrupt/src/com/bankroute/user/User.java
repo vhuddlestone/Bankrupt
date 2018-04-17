@@ -94,6 +94,9 @@ public abstract class User {
 	public void setRole(int role) {
 		this.role = role;
 	}
+	public SQLInteraction getSQLInstance() {
+		return this.sqlInteraction;
+	}
 	
 	@Override
 	public String toString(){

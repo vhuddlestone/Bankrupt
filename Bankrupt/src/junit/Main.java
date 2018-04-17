@@ -3,9 +3,11 @@ import java.util.Vector;
 
 import com.bankroute.datatools.*;
 import com.bankroute.tools.*;
+import com.bankroute.user.Customer;
 import com.bankroute.user.User;
 
 import frames.LoginFrame;
+import frames.UserViewFrame;
 
 public class Main {
 
@@ -20,7 +22,7 @@ public class Main {
 		System.out.println("pwd:");
 		System.out.println("pwd:"+MD5Encryption.encrypteString("test"));
 		LoginFrame loginFrame= new LoginFrame(sqlInteraction);
-		loginFrame.setVisible(true);;
+		loginFrame.setVisible(true);
 	}
 
 }

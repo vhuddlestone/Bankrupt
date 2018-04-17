@@ -12,6 +12,9 @@ public class Customer extends User {
 	this.councillor=councillor;
 	
 	}
+	
+	public Customer() {
+	}
 
 	/**
 	 * @return the councillor

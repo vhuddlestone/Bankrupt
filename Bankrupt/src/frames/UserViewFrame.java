@@ -4,8 +4,12 @@ import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
+
+import com.bankroute.user.Customer;
 import com.bankroute.user.User;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -20,12 +24,15 @@ public class UserViewFrame extends javax.swing.JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private User currentUser;
 
 	/**
 	 * Creates new form UserViewFrame
 	 */
 	public UserViewFrame(User user) {
 		initComponents();
+		this.currentUser=user;
 		Vector<User> vectUser = user.getCustomersInCharge();
 
 		String header[] = { "id", "firstname", "lastname", "password", "mail", "address", "role" ,""};
@@ -45,7 +52,7 @@ public class UserViewFrame extends javax.swing.JFrame {
 			
 			modelTable.addRow(model);
 		}
-	
+		
 		UserTable.setModel(modelTable);
 	}
 
@@ -65,7 +72,7 @@ public class UserViewFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        UserTable.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
+        UserTable.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
         UserTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -127,6 +134,11 @@ public class UserViewFrame extends javax.swing.JFrame {
 		JButton EditButton = new JButton();
 		EditButton.setText("Edit");
 		EditButton.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		EditButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				EditUserButtonActionPerformed(evt);
+			}
+		});
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(
@@ -165,7 +177,27 @@ public class UserViewFrame extends javax.swing.JFrame {
 	}
 
 	private void AddUserButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
+		UserDetailsFrame userCreateFrame = new UserDetailsFrame(currentUser.getSQLInstance());
+		userCreateFrame.setVisible(true);
+	}
+	
+	private void EditUserButtonActionPerformed(ActionEvent evt) {
+		int userId = (int) UserTable.getValueAt(UserTable.getSelectedRow(), 0);
+		System.out.println(userId);
+		Vector<User> vectCustomers= currentUser.getCustomersInCharge();
+		User userToEdit= null;
+		/*		
+		for(User customer: vectCustomers) {
+			if(customer.getId()==userId) {
+				userToEdit=customer;
+				break;
+			}
+		}*/
+		
+		userToEdit=new Customer(userId,"address test","Jean","Jaques","jean.jaques@ok.fr","password", 1, currentUser.getSQLInstance(), 2);
+		UserDetailsFrame addUserFrame = new UserDetailsFrame(userToEdit);
+		addUserFrame.setVisible(true);
+		
 	}
 
 	/**
