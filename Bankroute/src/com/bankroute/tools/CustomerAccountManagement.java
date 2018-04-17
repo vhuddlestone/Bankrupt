@@ -68,10 +68,33 @@ public class CustomerAccountManagement implements AccountManagement {
 	public User createAccount(String address, String firstName, String lastName, String mail, String password,
 			int role) {
 		
-		String requete = "INSERT INTO user (id,address, firstName, lastName, mail, password, role) VALUES ('"+address+"','"
-				+firstName+"','"+lastName+"','"+mail+"','"+password+"',"+role+")";
-		
+		String requete = "SELECT MAX(id) FROM user";
 		ResultSet rs=sqlInteraction.executeQuery(requete);
+		int id = 1;
+		
+		try {
+			rs.next();
+			id = rs.getInt(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
+				
+		requete = "INSERT INTO user (id,address, firstName, lastName, mail, password, role) VALUES ("+id+"'"+address+"','"
+				+firstName+"','"+lastName+"','"+mail+"','"+password+"',"+role+")";
+		rs=sqlInteraction.executeQuery(requete);
+		
+		switch(role)
+		{
+		case customerRole:
+			requete = "INSERT INTO customer (councillor_id,user_id) VALUES ("+0+","+id+")";
+		case bankerRole:
+			requete = "INSERT INTO customer (councillor_id,user_id) VALUES ("+0+","+id+")";
+		case adminRole:
+			requete = "INSERT INTO customer (councillor_id,user_id) VALUES ("+0+","+id+")";
+			
+		}
+		
+		rs=sqlInteraction.executeQuery(requete);
 		return null;
 		
 	}

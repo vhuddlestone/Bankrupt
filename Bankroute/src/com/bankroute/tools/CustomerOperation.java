@@ -53,7 +53,7 @@ public class CustomerOperation implements OperationManagement {
 		return null;
 	}
 	
-	
+		
 	public boolean makeOperation(double amount, BankAccount bankAccountSender, int numberAccountReceiver) {
 		try{
 			vectBankAccount = getBankAccount(sqlInteraction, bankAccountSender.accountType);	

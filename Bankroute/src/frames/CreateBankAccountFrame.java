@@ -7,10 +7,13 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.bankroute.datatools.SQLInteraction;
+import com.bankroute.user.Customer;
 import com.bankroute.user.User;
 
 import javax.swing.JLabel;
 import java.awt.Font;
+
+import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -20,6 +23,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JList;
 import javax.swing.JRadioButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 /**
  * Generic fram to add/edit a user
@@ -40,19 +45,26 @@ public class CreateBankAccountFrame extends JFrame {
 	private String password = "";
 
 	private JPanel contentPane;
-	
-	/**
-	 * Create the frame for a new user, withour pre-setted informations
-	 */
-	public CreateBankAccountFrame(SQLInteraction sqlInteraction) {
-		initComponents();
-		this.sqlInteraction=sqlInteraction;
-	}
 
 	/**
 	 * Create the frame for edit a user
 	 * @wbp.parser.constructor
 	 */
+	
+	/*public static void main(String[] args) {
+		Customer test = new Customer(1,"8 Rue Bédarrides","R","G","aaa@aaa.aaa","test",2,null,2);
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					UserInterfaceFrame frame = new UserInterfaceFrame(test);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}*/
+	
 	public CreateBankAccountFrame(User userToEdit) {
 		if (userToEdit != null) {
 			this.firstName = userToEdit.getFirstName();
@@ -76,9 +88,6 @@ public class CreateBankAccountFrame extends JFrame {
 		frameLabel.setFont(new Font("Tahoma", Font.PLAIN, 24));
 
 		JButton ValideButton = new JButton("Cr\u00E9er");
-		if(this.firstName!="") {
-			ValideButton = new JButton("Editer");
-		}
 
 		ValideButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -91,52 +100,56 @@ public class CreateBankAccountFrame extends JFrame {
 		});
 
 		JButton CancelButton = new JButton("Quitter");
+		CancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		
 
 		/* Gestion affichage des éléments */
 		
 		JLabel lblSlectionnerUnType = new JLabel("S\u00E9lectionner un type de compte");
 		lblSlectionnerUnType.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
-		JList list = new JList();
-		
 		JRadioButton rdbtnCompteCourant = new JRadioButton("Compte courant");
 		
 		JRadioButton rdbtnComptepargnePel = new JRadioButton("Compte \u00E9pargne: PEL");
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("Compte \u00E9pargne: Livret A");
+		JRadioButton rdbtnLivretA = new JRadioButton("Compte \u00E9pargne: Livret A");
 		
 		JRadioButton rdbtnAssuranceVie = new JRadioButton("Assurance vie");
-
+		
+		ButtonGroup buttonGroup = new ButtonGroup();
+		buttonGroup.add(rdbtnCompteCourant);
+		buttonGroup.add(rdbtnComptepargnePel);
+		buttonGroup.add(rdbtnLivretA);
+		buttonGroup.add(rdbtnAssuranceVie);
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(rdbtnCompteCourant)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(list, GroupLayout.PREFERRED_SIZE, 1, GroupLayout.PREFERRED_SIZE))
-								.addComponent(rdbtnNewRadioButton))
-							.addGap(26)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(rdbtnAssuranceVie, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)
-								.addComponent(rdbtnComptepargnePel))
-							.addContainerGap(72, Short.MAX_VALUE))
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(rdbtnCompteCourant)
+										.addComponent(rdbtnLivretA))
+									.addGap(26)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(rdbtnAssuranceVie, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)
+										.addComponent(rdbtnComptepargnePel)))
+								.addComponent(lblSlectionnerUnType)))
+						.addComponent(frameLabel)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(lblSlectionnerUnType)
-							.addContainerGap(200, Short.MAX_VALUE))))
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-					.addComponent(frameLabel)
-					.addContainerGap(48, Short.MAX_VALUE))
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(ValideButton)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(CancelButton)
-					.addContainerGap(260, Short.MAX_VALUE))
+							.addContainerGap()
+							.addComponent(ValideButton)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(CancelButton)))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -146,14 +159,12 @@ public class CreateBankAccountFrame extends JFrame {
 					.addGap(45)
 					.addComponent(lblSlectionnerUnType)
 					.addGap(36)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(list, GroupLayout.PREFERRED_SIZE, 1, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(rdbtnCompteCourant)
-							.addComponent(rdbtnComptepargnePel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(rdbtnCompteCourant)
+						.addComponent(rdbtnComptepargnePel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(rdbtnNewRadioButton)
+						.addComponent(rdbtnLivretA)
 						.addComponent(rdbtnAssuranceVie))
 					.addGap(35)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
