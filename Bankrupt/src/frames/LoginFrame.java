@@ -139,7 +139,7 @@ public class LoginFrame extends javax.swing.JFrame {
 					case bankerRole: 
 						UserViewFrame userViewFrame=new UserViewFrame(currentUser);
 						userViewFrame.setVisible(true);
-						this.setVisible(false);
+						this.dispose();
 						break;	
 				}
 			}

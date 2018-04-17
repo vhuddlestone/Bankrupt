@@ -31,7 +31,6 @@ public class UserDetailsFrame extends JFrame {
 	final static String userDetailEditType= "edit";
 	
 	private SQLInteraction sqlInteraction;
-	private int bankerId;
 	
 	private int id;
 	private String firstName = "";
@@ -56,23 +55,20 @@ public class UserDetailsFrame extends JFrame {
 		this.sqlInteraction=sqlInteraction;
 	}
 
-	public UserDetailsFrame(SQLInteraction sqlInteraction, User userToEdit, int bankerId) {
-		this.bankerId=bankerId;
-		this.sqlInteraction=sqlInteraction;
-		initUser(userToEdit);
-		initComponents();
-	}
-	
-	private void initUser(User user) {
-		if (user != null) {
-			this.firstName = user.getFirstName();
-			this.lastName = user.getLastName();
-			this.address = user.getAddress();
-			this.mail = user.getMail();
-			this.password = user.getPassword();
-			this.sqlInteraction=user.getSQLInstance();
-			this.id=user.getId();
+	/**
+	 * Create the frame for edit a user
+	 */
+	public UserDetailsFrame(User userToEdit) {
+		if (userToEdit != null) {
+			this.firstName = userToEdit.getFirstName();
+			this.lastName = userToEdit.getLastName();
+			this.address = userToEdit.getAddress();
+			this.mail = userToEdit.getMail();
+			this.password = userToEdit.getPassword();
+			this.sqlInteraction=userToEdit.getSQLInstance();
+			this.id=userToEdit.getId();
 		}
+		initComponents();
 	}
 
 	private void initComponents() {
@@ -198,13 +194,13 @@ public class UserDetailsFrame extends JFrame {
 	private void createOrEditUser() {
 		switch(this.type) {
 		case userDetailAddType:
-			sqlInteraction.addUser(firstNameInput.getText(), lastNameInput.getText(), mailInput.getText(), addressInput.getText(), passwordInput.getText(), 1, this.bankerId);
+			sqlInteraction.addUser(firstNameInput.getText(), lastNameInput.getText(), mailInput.getText(), addressInput.getText(), passwordInput.getText(), 1);
 			break;
 		case userDetailEditType:
 			sqlInteraction.editUser(this.id,firstNameInput.getText(), lastNameInput.getText(), mailInput.getText(), addressInput.getText(), passwordInput.getText(), 1);
 			break;
 		}
-		this.dispose();
+		
 	}
 
 }

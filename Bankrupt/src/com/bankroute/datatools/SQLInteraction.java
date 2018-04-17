@@ -155,26 +155,48 @@ public final class SQLInteraction {
 	}
 	
 	
-	public void addUser(String firstName, String lastName, String mail, String address, String password, int role) {
-		ResultSet rs = null;
+	public void addUser(String firstName, String lastName, String mail, String address, String password, int role, int councillorId) {
 		String requete = "";
 		
 		password= MD5Encryption.encrypteString(password);
 		
-		requete = "INSERT INTO user(firstname, lastname, mail, address, password, role) VALUES ("+firstName+","+lastName+","+mail+","+address+","+password+","+role+")";
-		
-		rs = executeQuery(requete);
-		
+		requete = "INSERT INTO user(firstname, lastname, mail, address, password, role) VALUES ('"+firstName+"','"+lastName+"','"+mail+"','"+address+"','"+password+"',"+role+")";
+		System.out.println(requete);
+		try {
+			int id = conn.createStatement().executeUpdate(requete);
+			int userId;
+			System.out.println(id);
+			if(councillorId!=-1) {
+				requete = "SELECT MAX(id) FROM user";
+				ResultSet rs=executeQuery(requete);
+				rs.next();
+				userId = rs.getInt(1);
+				System.out.println("userId:="+userId);
+				requete = "INSERT INTO customer(councillor_id, user_id) VALUES ("+councillorId+","+userId+")";
+				System.out.println(requete);
+				id = conn.createStatement().executeUpdate(requete);
+				System.out.println(id);
+			}
+		} catch (SQLException e) {
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
+		}
 		// TODO voir pour vérifier comment s'est passé un insert dans la base données. voir si le rs contient la linge
 	}
 	
 	public void editUser(int userId, String firstName, String lastName, String mail, String address, String password, int role) {
-		ResultSet rs = null;
 		password= MD5Encryption.encrypteString(password);
 
-		String requete = "Update user SET firstname="+firstName+", lastname="+lastName+", mail="+mail+", address="+address+", password="+password+", role="+role+" WHERE id="+userId;
+		String requete = "Update user SET firstname='"+firstName+"', lastname='"+lastName+"', mail='"+mail+"', address='"+address+"', password='"+password+"', role="+role+" WHERE id="+userId;
 	
-		rs = executeQuery(requete);
+		try {
+			int id = conn.createStatement().executeUpdate(requete);
+		} catch (SQLException e) {
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
+		}
 	}
 	/**
 	 * Function to delete an user, first checking if the user to delete have bank accounts

@@ -3,8 +3,10 @@ package frames;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import com.bankroute.datatools.SQLInteraction;
 import com.bankroute.user.Banker;
 import com.bankroute.user.Customer;
 import com.bankroute.user.User;
@@ -37,25 +39,7 @@ public class UserViewFrame extends javax.swing.JFrame {
 		initComponents();
 		this.currentUser = user;
 		Vector<User> vectUser = user.getCustomersInCharge();
-
-		String header[] = { "id", "firstname", "lastname", "password", "mail", "address", "role", "" };
-
-		DefaultTableModel modelTable = new DefaultTableModel();
-		modelTable.setColumnIdentifiers(header);
-
-		for (User customer : vectUser) {
-			Object[] model = new Object[8];
-			model[0] = customer.getId();
-			model[1] = customer.getFirstName();
-			model[2] = customer.getLastName();
-			model[3] = customer.getPassword();
-			model[4] = customer.getMail();
-			model[5] = customer.getAddress();
-			model[6] = customer.getRole();
-
-			modelTable.addRow(model);
-		}
-
+		DefaultTableModel modelTable = parseUserToJTableModel(vectUser);
 		UserTable.setModel(modelTable);
 	}
 
@@ -169,11 +153,20 @@ public class UserViewFrame extends javax.swing.JFrame {
 	}
 
 	private void AddUserButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		UserDetailsFrame userCreateFrame = new UserDetailsFrame(currentUser.getSQLInstance());
-		userCreateFrame.setVisible(true);
+		UserDetailsFrame userCreateFrame = new UserDetailsFrame(currentUser.getSQLInstance(),null, currentUser.getId());
+		System.out.println("currentUserId:="+currentUser.getId());
+		userCreateFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+			@Override
+			public void windowClosed(java.awt.event.WindowEvent e) {
+				updateTable();
+			}
+
+		});
+		 userCreateFrame.setVisible(true);
 	}
 
 	private void EditUserButtonActionPerformed(ActionEvent evt) {
+		System.out.println("selectedRow"+UserTable.getSelectedRow());
 		if (UserTable.getSelectedRow() != -1) {
 			int userId = (int) UserTable.getValueAt(UserTable.getSelectedRow(), 0);
 			System.out.println(userId);
@@ -186,34 +179,26 @@ public class UserViewFrame extends javax.swing.JFrame {
 					break;
 				}
 			}
-
-			// userToEdit=new Customer(userId,"address
-			// test","Jean","Jaques","jean.jaques@ok.fr","password", 1,
-			// currentUser.getSQLInstance(), 2);
-			UserDetailsFrame addUserFrame = new UserDetailsFrame(userToEdit);
-			addUserFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+			System.out.println("currentUserId:="+currentUser.getId());
+			UserDetailsFrame editUserFrame = new UserDetailsFrame(currentUser.getSQLInstance(),userToEdit, currentUser.getId());
+			editUserFrame.addWindowListener(new java.awt.event.WindowAdapter() {
 				@Override
-				public void windowClosing(java.awt.event.WindowEvent e) {
-					System.out.println("TEST CLOSURE");
+				public void windowClosed(java.awt.event.WindowEvent e) {
+					updateTable();
+					System.out.println("maj apres edit");
 				}
 			});
-			addUserFrame.setVisible(true);
+			editUserFrame.setVisible(true);
 		}
-		UserDetailsFrame test = new UserDetailsFrame(this.currentUser.getSQLInstance());
-		test.addWindowListener(new java.awt.event.WindowAdapter() {
-			@Override
-			public void windowClosing(java.awt.event.WindowEvent e) {
-				updateTable();
-			}
-		});
-		test.setVisible(true);
-
 	}
 
 	private void updateTable() {
 		switch(this.currentUser.getRole()) {
 		case bankerRole:
-			
+			Vector<User> newCustomersInCharge;
+			newCustomersInCharge=currentUser.getSQLInstance().getClientsFromBankerId(currentUser.getId());
+			currentUser= new Banker(currentUser.getId(),currentUser.getAddress(), currentUser.getFirstName(), currentUser.getLastName(),currentUser.getMail(), currentUser.getPassword(), currentUser.getRole(), currentUser.getSQLInstance(),newCustomersInCharge);
+			UserTable.setModel(parseUserToJTableModel(newCustomersInCharge));
 			break;
 		case adminRole:
 			
@@ -222,6 +207,33 @@ public class UserViewFrame extends javax.swing.JFrame {
 			
 			break;
 		}
+	}
+	
+	/**
+	 * function who parse a vector of user on a table model who can be used to display data on JTable 
+	 * @param vectUser 
+	 * @return table Model
+	 */
+	private DefaultTableModel parseUserToJTableModel(Vector<User> vectUser) {
+		DefaultTableModel modelTable = new DefaultTableModel();
+		String header[] = { "id", "firstname", "lastname", "password", "mail", "address", "role", "" };
+
+		modelTable.setColumnIdentifiers(header);
+
+		for (User customer : vectUser) {
+			Object[] model = new Object[8];
+			model[0] = customer.getId();
+			model[1] = customer.getFirstName();
+			model[2] = customer.getLastName();
+			model[3] = customer.getPassword();
+			model[4] = customer.getMail();
+			model[5] = customer.getAddress();
+			model[6] = customer.getRole();
+
+			modelTable.addRow(model);
+		}
+		
+		return modelTable;
 	}
 
 	/**
