@@ -1,5 +1,8 @@
 package frames;
 
+import static javax.swing.JOptionPane.WARNING_MESSAGE;
+import static javax.swing.JOptionPane.showMessageDialog;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -7,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.bankroute.datatools.SQLInteraction;
+import com.bankroute.tools.CustomerAccountManagement;
 import com.bankroute.user.User;
 
 import javax.swing.JLabel;
@@ -47,13 +51,14 @@ public class UserDetailsFrame extends JFrame {
 	private JTextField addressInput;
 	private JTextField mailInput;
 	private JTextField passwordInput;
-
+	private CustomerAccountManagement customerAccountManagement;
 	/**
 	 * Create the frame for a new user, withour pre-setted informations
 	 */
 	public UserDetailsFrame(SQLInteraction sqlInteraction) {
 		initComponents();
 		this.sqlInteraction=sqlInteraction;
+		customerAccountManagement=new CustomerAccountManagement(this.sqlInteraction);
 	}
 
 	public UserDetailsFrame(SQLInteraction sqlInteraction, User userToEdit, int bankerId) {
@@ -198,10 +203,13 @@ public class UserDetailsFrame extends JFrame {
 	private void createOrEditUser() {
 		switch(this.type) {
 		case userDetailAddType:
-			sqlInteraction.addUser(firstNameInput.getText(), lastNameInput.getText(), mailInput.getText(), addressInput.getText(), passwordInput.getText(), 1, this.bankerId);
+			customerAccountManagement.addUser(firstNameInput.getText(), lastNameInput.getText(), mailInput.getText(), addressInput.getText(), passwordInput.getText(), 1, this.bankerId);
 			break;
 		case userDetailEditType:
-			sqlInteraction.editUser(this.id,firstNameInput.getText(), lastNameInput.getText(), mailInput.getText(), addressInput.getText(), passwordInput.getText(), 1);
+			int retour = customerAccountManagement.editUser(this.id,firstNameInput.getText(), lastNameInput.getText(), mailInput.getText(), addressInput.getText(), passwordInput.getText(), 1);
+			if (retour == -1) {
+				showMessageDialog(null, "Edit Failed", "Warning", WARNING_MESSAGE);
+			}
 			break;
 		}
 		this.dispose();

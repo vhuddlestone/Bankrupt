@@ -50,6 +50,7 @@ public final class SQLInteraction {
 		ResultSet rs = null;
 		try {
 			Statement stm = conn.createStatement();
+			System.out.println(sqlQuery);
 			rs = stm.executeQuery(sqlQuery);
 		} catch (SQLException e) {
 			System.out.println("SQLException: " + e.getMessage());
@@ -83,7 +84,6 @@ public final class SQLInteraction {
 		password = MD5Encryption.encrypteString(password);
 		String requete = "Select * FROM USER WHERE mail='" + userName + "' AND password='" + password + "'";
 
-		System.out.println(requete);
 		rs = executeQuery(requete);
 
 		try {
@@ -120,7 +120,6 @@ public final class SQLInteraction {
 
 		requete = "SELECT user.* FROM user, customer WHERE user.id=customer.user_id AND customer.councillor_id="
 				+ id;
-		System.out.println(requete);
 		rs = executeQuery(requete);
 		try {
 			vectClients = new Vector<User>();
@@ -154,81 +153,22 @@ public final class SQLInteraction {
 		return councillor_id;
 	}
 	
-	
-	public void addUser(String firstName, String lastName, String mail, String address, String password, int role, int councillorId) {
-		String requete = "";
-		
-		password= MD5Encryption.encrypteString(password);
-		
-		requete = "INSERT INTO user(firstname, lastname, mail, address, password, role) VALUES ('"+firstName+"','"+lastName+"','"+mail+"','"+address+"','"+password+"',"+role+")";
-		System.out.println(requete);
-		try {
-			int id = conn.createStatement().executeUpdate(requete);
-			int userId;
-			System.out.println(id);
-			if(councillorId!=-1) {
-				requete = "SELECT MAX(id) FROM user";
-				ResultSet rs=executeQuery(requete);
-				rs.next();
-				userId = rs.getInt(1);
-				System.out.println("userId:="+userId);
-				requete = "INSERT INTO customer(councillor_id, user_id) VALUES ("+councillorId+","+userId+")";
-				System.out.println(requete);
-				id = conn.createStatement().executeUpdate(requete);
-				System.out.println(id);
-			}
-		} catch (SQLException e) {
-			System.out.println("SQLException: " + e.getMessage());
-			System.out.println("SQLState: " + e.getSQLState());
-			System.out.println("VendorError: " + e.getErrorCode());
-		}
-		// TODO voir pour vérifier comment s'est passé un insert dans la base données. voir si le rs contient la linge
-	}
-	
-	public void editUser(int userId, String firstName, String lastName, String mail, String address, String password, int role) {
-		password= MD5Encryption.encrypteString(password);
-
-		String requete = "Update user SET firstname='"+firstName+"', lastname='"+lastName+"', mail='"+mail+"', address='"+address+"', password='"+password+"', role="+role+" WHERE id="+userId;
-	
-		try {
-			int id = conn.createStatement().executeUpdate(requete);
-		} catch (SQLException e) {
-			System.out.println("SQLException: " + e.getMessage());
-			System.out.println("SQLState: " + e.getSQLState());
-			System.out.println("VendorError: " + e.getErrorCode());
-		}
-	}
 	/**
-	 * Function to delete an user, first checking if the user to delete have bank accounts
-	 * @param id
-	 * @return errorMessage empy if user deleted, otherwise error message to display to user.
+	 * Execute INSERT and UPDATE querys
+	 * @param requete
+	 * @return 1 for updated, -1 for failures
 	 */
-	public String deleteUser(int id) {
-		String errorMessage="";
-		ResultSet rs= null;
-		String requete;
-		
-		// first checking if accounts exists for this user
-		requete= "SELECT count(account.number) as NB FROM account, user WHERE user.id=account.customer_id";
-		rs= executeQuery(requete);
-		
+	public int executeUpdate(String requete) {
+		int retour=-1;
 		try {
-			if(rs.next()) {
-				errorMessage +="USer already have "+ rs.getInt("NB") +"opened accounts";
-			}
+			System.out.println(requete);
+			retour= conn.createStatement().executeUpdate(requete);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
 		}
-		
-		if(errorMessage.isEmpty()) {
-			rs=null;
-			requete= "DELETE FROM user WHERE id="+id;
-			rs= executeQuery(requete);
-			
-			requete="DELETE FROM customer where customer_id="+id;
-			rs=executeQuery(requete);
-		}
-		return errorMessage;
+		return retour;
 	}
 
 }

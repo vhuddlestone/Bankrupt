@@ -7,9 +7,14 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import com.bankroute.datatools.SQLInteraction;
+import com.bankroute.tools.CustomerAccountManagement;
 import com.bankroute.user.Banker;
 import com.bankroute.user.Customer;
 import com.bankroute.user.User;
+
+import static javax.swing.JOptionPane.WARNING_MESSAGE;
+import static javax.swing.JOptionPane.showMessageDialog;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 
@@ -31,13 +36,14 @@ public class UserViewFrame extends javax.swing.JFrame {
 	static final int customerRole = 1;
 	static final int adminRole = 3;
 	private User currentUser;
-
+	private CustomerAccountManagement customerAccountManagement;
 	/**
 	 * Creates new form UserViewFrame
 	 */
 	public UserViewFrame(User user) {
 		initComponents();
 		this.currentUser = user;
+		customerAccountManagement= new CustomerAccountManagement(user.getSQLInstance());
 		Vector<User> vectUser = user.getCustomersInCharge();
 		DefaultTableModel modelTable = parseUserToJTableModel(vectUser);
 		UserTable.setModel(modelTable);
@@ -57,7 +63,7 @@ public class UserViewFrame extends javax.swing.JFrame {
 		UserTable = new javax.swing.JTable();
 		DeleteUserButton = new javax.swing.JButton();
 
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
 		UserTable.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
 		UserTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][] {
@@ -149,7 +155,17 @@ public class UserViewFrame extends javax.swing.JFrame {
 	}// </editor-fold>
 
 	private void DeleteUserButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
+		int selectedRow = UserTable.getSelectedRow();
+		if(selectedRow!=-1) {
+			int userId = (int) UserTable.getValueAt(UserTable.getSelectedRow(), 0);
+			String error=customerAccountManagement.deleteUser(userId);
+			if(error !="") {
+				showMessageDialog(null, error, "Error", WARNING_MESSAGE);
+			}
+			updateTable();
+		}else {
+			showMessageDialog(null, "Select a user before click on DELETE", "Warning", WARNING_MESSAGE);
+		}
 	}
 
 	private void AddUserButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -160,7 +176,6 @@ public class UserViewFrame extends javax.swing.JFrame {
 			public void windowClosed(java.awt.event.WindowEvent e) {
 				updateTable();
 			}
-
 		});
 		 userCreateFrame.setVisible(true);
 	}

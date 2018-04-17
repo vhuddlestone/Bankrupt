@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import com.bankroute.bankaccount.BankAccount;
+import com.bankroute.datatools.MD5Encryption;
 import com.bankroute.datatools.SQLInteraction;
 import com.bankroute.user.Banker;
 import com.bankroute.user.Customer;
@@ -126,6 +127,91 @@ public class CustomerAccountManagement implements AccountManagement {
 			e.printStackTrace();
 		}
 		return councillor_id;
+	}
+	
+	/**
+	 * Function to delete an user, first checking if the user to delete have bank accounts
+	 * @param id
+	 * @return errorMessage empy if user deleted, otherwise error message to display to user.
+	 */
+	public String deleteUser(int id) {
+		String errorMessage="";
+		ResultSet rs= null;
+		String requete;
+		
+		// first checking if accounts exists for this user
+		requete= "SELECT count(account.number) as NB FROM account, user WHERE user.id=account.customer_id";
+		rs= sqlInteraction.executeQuery(requete);
+		
+		/*try {
+			if(rs.next()) {
+				errorMessage +="USer already have "+ rs.getInt("NB") +"opened accounts";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}*/
+		
+		if(errorMessage.isEmpty()) {
+			rs=null;
+			requete= "DELETE FROM user WHERE id="+id;
+			int retour = sqlInteraction.executeUpdate(requete);
+			if(retour != -1) {
+				requete="DELETE FROM customer where councillor_id="+id;
+				retour=sqlInteraction.executeUpdate(requete);
+				if (retour==-1) {
+					errorMessage="\n Dele customer cover failed";
+				}
+			}else {
+				errorMessage+="\n Delete user failed";
+			}
+		}
+		return errorMessage;
+	}
+	
+	/**
+	 * Function to add a customer or a user in database
+	 * @param firstName
+	 * @param lastName
+	 * @param mail
+	 * @param address
+	 * @param password
+	 * @param role
+	 * @param councillorId (-1 to create user by user, otherwise to create user by banker)
+	 */
+	public void addUser(String firstName, String lastName, String mail, String address, String password, int role, int councillorId) {
+		String requete = "";
+		
+		password= MD5Encryption.encrypteString(password);
+		
+		requete = "INSERT INTO user(firstname, lastname, mail, address, password, role) VALUES ('"+firstName+"','"+lastName+"','"+mail+"','"+address+"','"+password+"',"+role+")";
+		try {
+			int id = sqlInteraction.executeUpdate(requete);
+			int userId;
+			System.out.println(id);
+			if(councillorId!=-1) {
+				requete = "SELECT MAX(id) FROM user";
+				ResultSet rs=sqlInteraction.executeQuery(requete);
+				rs.next();
+				userId = rs.getInt(1);
+				System.out.println("userId:="+userId);
+				requete = "INSERT INTO customer(councillor_id, user_id) VALUES ("+councillorId+","+userId+")";
+				id = sqlInteraction.executeUpdate(requete);
+				System.out.println(id);
+			}
+		} catch (SQLException e) {
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
+		}
+		// TODO voir pour vérifier comment s'est passé un insert dans la base données. voir si le rs contient la linge
+	}
+	
+	public int editUser(int userId, String firstName, String lastName, String mail, String address, String password, int role) {
+		int retour;
+		password= MD5Encryption.encrypteString(password);
+		String requete = "Update user SET firstname='"+firstName+"', lastname='"+lastName+"', mail='"+mail+"', address='"+address+"', password='"+password+"', role="+role+" WHERE id="+userId;
+		retour = sqlInteraction.executeUpdate(requete);
+		return retour;
 	}
 
 }
