@@ -168,6 +168,14 @@ public final class SQLInteraction {
 		// TODO voir pour vérifier comment s'est passé un insert dans la base données. voir si le rs contient la linge
 	}
 	
+	public void editUser(int userId, String firstName, String lastName, String mail, String address, String password, int role) {
+		ResultSet rs = null;
+		password= MD5Encryption.encrypteString(password);
+
+		String requete = "Update user SET firstname="+firstName+", lastname="+lastName+", mail="+mail+", address="+address+", password="+password+", role="+role+" WHERE id="+userId;
+	
+		rs = executeQuery(requete);
+	}
 	/**
 	 * Function to delete an user, first checking if the user to delete have bank accounts
 	 * @param id

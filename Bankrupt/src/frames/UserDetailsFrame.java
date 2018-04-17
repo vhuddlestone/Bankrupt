@@ -14,6 +14,7 @@ import java.awt.Font;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.Spring;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
@@ -26,13 +27,18 @@ import java.awt.event.MouseEvent;
  */
 public class UserDetailsFrame extends JFrame {
 	
+	final static String userDetailAddType="add";
+	final static String userDetailEditType= "edit";
+	
 	private SQLInteraction sqlInteraction;
 	
+	private int id;
 	private String firstName = "";
 	private String lastName = "";
 	private String address = "";
 	private String mail = "";
 	private String password = "";
+	private String type;
 
 	private JPanel contentPane;
 	private JTextField firstNameInput;
@@ -60,16 +66,19 @@ public class UserDetailsFrame extends JFrame {
 			this.mail = userToEdit.getMail();
 			this.password = userToEdit.getPassword();
 			this.sqlInteraction=userToEdit.getSQLInstance();
+			this.id=userToEdit.getId();
 		}
 		initComponents();
 	}
 
 	private void initComponents() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 394, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		
+		this.type="add";
 
 		JLabel frameLabel = new JLabel("Cr\u00E9ation d'un compte client");
 		frameLabel.setFont(new Font("Tahoma", Font.PLAIN, 24));
@@ -108,19 +117,16 @@ public class UserDetailsFrame extends JFrame {
 		passwordInput = new JTextField();
 		passwordInput.setColumns(10);
 		passwordInput.setText(this.password);
-
+		
 		JButton ValideButton = new JButton("Cr\u00E9er");
 		if(this.firstName!="") {
 			ValideButton = new JButton("Editer");
+			this.type="edit";
 		}
 
 		ValideButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				/*if() {
-					//updateUser(); TODO  
-				}else {
-					// createUser(); TODO AJOUTER VERIFICATIONS DES CHAMPS ET APPEL DE addUSer
-				}*/
+				createOrEditUser();
 			}
 		});
 
@@ -183,6 +189,18 @@ public class UserDetailsFrame extends JFrame {
 						.createParallelGroup(Alignment.BASELINE).addComponent(ValideButton).addComponent(CancelButton))
 				.addGap(39)));
 		contentPane.setLayout(gl_contentPane);
+	}
+	
+	private void createOrEditUser() {
+		switch(this.type) {
+		case userDetailAddType:
+			sqlInteraction.addUser(firstNameInput.getText(), lastNameInput.getText(), mailInput.getText(), addressInput.getText(), passwordInput.getText(), 1);
+			break;
+		case userDetailEditType:
+			sqlInteraction.editUser(this.id,firstNameInput.getText(), lastNameInput.getText(), mailInput.getText(), addressInput.getText(), passwordInput.getText(), 1);
+			break;
+		}
+		
 	}
 
 }
