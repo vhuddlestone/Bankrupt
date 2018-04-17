@@ -1,4 +1,6 @@
 package com.bankroute.user;
+import java.util.Vector;
+
 import com.bankroute.datatools.SQLInteraction;
 import com.bankroute.tools.*;
 
@@ -41,10 +43,11 @@ public abstract class User {
 		this.role = role;
 		this.sqlInteraction=sqlInteraction;
 		this.accountManagement = new CustomerAccountManagement(sqlInteraction);
-		this.operationManagement = new CustomerOperation();
+		//this.operationManagement = new CustomerOperation();
 		
 	}
 	
+	public abstract Vector<User> getCustomersInCharge();
 	/**
 	 * @return
 	 */
@@ -90,6 +93,15 @@ public abstract class User {
 	}
 	public void setRole(int role) {
 		this.role = role;
+	}
+	public SQLInteraction getSQLInstance() {
+		return this.sqlInteraction;
+	}
+	
+	@Override
+	public String toString(){
+		return "User: "+firstName + " "+lastName+" | role:"+role;
+		
 	}
 	
 }
