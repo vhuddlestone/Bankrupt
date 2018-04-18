@@ -56,8 +56,8 @@ public class UserInterfaceFrame extends JFrame {
 			this.currentUser = userConnected;
 			fullName = firstName + " " + lastName;
 		}
-		initComponentsUser();
-
+		
+		initComponentsBanker();
 		switch(userConnected.getRole()) {
 		case customerRole:
 			initComponentsUser();
@@ -200,6 +200,14 @@ public class UserInterfaceFrame extends JFrame {
 			}
 		});
 		
+		JButton createCustomerButton = new JButton("Créer un compte client");
+		createCustomerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				UserDetailsFrame frame = new UserDetailsFrame(sqlInteraction);
+				frame.setVisible(true);
+			}
+		});
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -213,13 +221,15 @@ public class UserInterfaceFrame extends JFrame {
 					.addGap(56))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap(168, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(btnSupprimerLeCompte, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-						.addComponent(createBankAccountButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(checkBankAccountButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(externalTransfertButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(btnVirerDeLargent, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(showCustomerListButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(createCustomerButton, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+							.addComponent(btnSupprimerLeCompte, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+							.addComponent(createBankAccountButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(checkBankAccountButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(externalTransfertButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(btnVirerDeLargent, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(showCustomerListButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
 					.addGap(158))
 		);
 		gl_contentPane.setVerticalGroup(
@@ -239,12 +249,12 @@ public class UserInterfaceFrame extends JFrame {
 					.addComponent(btnSupprimerLeCompte)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(showCustomerListButton)
-					.addPreferredGap(ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(createCustomerButton)
+					.addPreferredGap(ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
 					.addComponent(roleLabel)
 					.addContainerGap())
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
-	
-	
 }
