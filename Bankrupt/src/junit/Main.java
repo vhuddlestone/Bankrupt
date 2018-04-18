@@ -17,7 +17,7 @@ public class Main {
 		String user = "root";
 		String password = "";
 		String port = "";
-
+		System.out.println(MD5Encryption.encrypteString("test"));
 		SQLInteraction sqlInteraction= new SQLInteraction(hostName, user, password, port, dbName);	
 		System.out.println("pwd:");
 		System.out.println("pwd:"+MD5Encryption.encrypteString("test"));

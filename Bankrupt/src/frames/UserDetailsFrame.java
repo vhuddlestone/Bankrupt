@@ -43,7 +43,7 @@ public class UserDetailsFrame extends JFrame {
 	private String address = "";
 	private String mail = "";
 	private String password = "";
-	private String type;
+	private String type="add";
 
 	private JPanel contentPane;
 	private JTextField firstNameInput;
@@ -65,6 +65,7 @@ public class UserDetailsFrame extends JFrame {
 		this.bankerId=bankerId;
 		this.sqlInteraction=sqlInteraction;
 		initUser(userToEdit);
+		customerAccountManagement=new CustomerAccountManagement(this.sqlInteraction);
 		initComponents();
 	}
 	
@@ -86,8 +87,6 @@ public class UserDetailsFrame extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		
-		this.type="add";
 
 		JLabel frameLabel = new JLabel("Cr\u00E9ation d'un compte client");
 		frameLabel.setFont(new Font("Tahoma", Font.PLAIN, 24));
@@ -212,7 +211,7 @@ public class UserDetailsFrame extends JFrame {
 			}
 			break;
 		}
-		this.dispose();
+		dispose();
 	}
 
 }

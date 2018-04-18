@@ -3,13 +3,10 @@ package frames;
 import java.util.Vector;
 
 import javax.swing.JButton;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import com.bankroute.datatools.SQLInteraction;
 import com.bankroute.tools.CustomerAccountManagement;
 import com.bankroute.user.Banker;
-import com.bankroute.user.Customer;
 import com.bankroute.user.User;
 
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
@@ -43,6 +40,14 @@ public class UserViewFrame extends javax.swing.JFrame {
 	public UserViewFrame(User user) {
 		initComponents();
 		this.currentUser = user;
+		switch (user.getRole()){
+			case bankerRole:
+				
+				break;
+			case adminRole:
+			
+				break;
+		}
 		customerAccountManagement= new CustomerAccountManagement(user.getSQLInstance());
 		Vector<User> vectUser = user.getCustomersInCharge();
 		DefaultTableModel modelTable = parseUserToJTableModel(vectUser);
@@ -57,12 +62,13 @@ public class UserViewFrame extends javax.swing.JFrame {
 	@SuppressWarnings("unchecked")
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents() {
-
+		
 		jScrollPane1 = new javax.swing.JScrollPane();
 		AddUserButton = new javax.swing.JButton();
 		UserTable = new javax.swing.JTable();
 		DeleteUserButton = new javax.swing.JButton();
-
+		
+		setResizable(false);
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
 		UserTable.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N

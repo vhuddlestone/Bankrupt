@@ -14,8 +14,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -33,8 +31,8 @@ public class LoginFrame extends javax.swing.JFrame {
 	 */
 	SQLInteraction sQLInteraction = null;
 	static final int customerRole = 1;
-	static final int bankerRole =2;
-	
+	static final int bankerRole = 2;
+
 	public LoginFrame(SQLInteraction sQLInteraction) {
 		this.sQLInteraction = sQLInteraction;
 		initComponents();
@@ -70,7 +68,7 @@ public class LoginFrame extends javax.swing.JFrame {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				ConnectButtonActionPerformed(evt);
 			}
-		}); 
+		});
 
 		UserNameImput.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
 		UserNameImput.setName("UserNameImput"); // NOI18N
@@ -83,44 +81,39 @@ public class LoginFrame extends javax.swing.JFrame {
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(
-			layout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(layout.createSequentialGroup()
-					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+				layout.createParallelGroup(Alignment.TRAILING)
 						.addGroup(layout.createSequentialGroup()
-							.addGap(81)
-							.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addComponent(PasswordLabel)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addGroup(layout.createSequentialGroup().addGap(81)
+												.addGroup(layout.createParallelGroup(Alignment.LEADING)
+														.addComponent(PasswordLabel).addComponent(UserNameLabel))
+												.addGap(28)
+												.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+														.addComponent(UserNameImput, GroupLayout.DEFAULT_SIZE, 167,
+																Short.MAX_VALUE)
+														.addComponent(PasswordImput)))
+										.addGroup(layout.createSequentialGroup().addGap(162)
+												.addComponent(ApllicationNameLabel)))
+								.addContainerGap(87, Short.MAX_VALUE))
+						.addGroup(layout.createSequentialGroup().addGap(0, 135, Short.MAX_VALUE)
+								.addComponent(ConnectButton, GroupLayout.PREFERRED_SIZE, 223,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(116)));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(ApllicationNameLabel)
+						.addPreferredGap(ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
+						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(UserNameImput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
 								.addComponent(UserNameLabel))
-							.addGap(28)
-							.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(UserNameImput, GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
-								.addComponent(PasswordImput)))
-						.addGroup(layout.createSequentialGroup()
-							.addGap(162)
-							.addComponent(ApllicationNameLabel)))
-					.addContainerGap(87, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup()
-					.addGap(0, 135, Short.MAX_VALUE)
-					.addComponent(ConnectButton, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
-					.addGap(116))
-		);
-		layout.setVerticalGroup(
-			layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(ApllicationNameLabel)
-					.addPreferredGap(ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
-					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(UserNameImput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(UserNameLabel))
-					.addGap(14)
-					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(PasswordImput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(PasswordLabel))
-					.addGap(43)
-					.addComponent(ConnectButton, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-					.addGap(35))
-		);
+						.addGap(14)
+						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(PasswordImput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(PasswordLabel))
+						.addGap(43)
+						.addComponent(ConnectButton, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+						.addGap(35)));
 		getContentPane().setLayout(layout);
 
 		UserNameImput.getAccessibleContext().setAccessibleName("");
@@ -142,17 +135,11 @@ public class LoginFrame extends javax.swing.JFrame {
 			System.out.println(
 					"Role of user: " + sQLInteraction.connectUser(UserNameImput.getText(), PasswordImput.getText()));
 			User currentUser = sQLInteraction.connectUser(UserNameImput.getText(), PasswordImput.getText());
-			switch (currentUser.getRole()) {
-			case bankerRole: 
-				UserInterfaceFrame userInterfaceFrame=new UserInterfaceFrame(currentUser);
-				userInterfaceFrame.setVisible(true);
-				this.setVisible(false);
-				break;	
-		}
-
+			UserInterfaceFrame userInterfaceFrame = new UserInterfaceFrame(currentUser);
+			userInterfaceFrame.setVisible(true);
+			dispose();
 		}
 	}
-	
 
 	/**
 	 * @param args
