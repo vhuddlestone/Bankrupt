@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
+import java.io.*;
 
 import com.bankroute.bankaccount.BankAccount;
 import com.bankroute.bankaccount.CurrentAccount;
@@ -42,21 +43,22 @@ public class CustomerOperation implements OperationManagement {
 		return vectBankAccount;
 	}
 	
-	BankAccount findBankAccount(Vector<BankAccount> vectBankAccount, int accountNumber, int accountType)
+	BankAccount findBankAccount(int customerID, int accountType)
 	{
-		for(BankAccount b : vectBankAccount)
+		Vector<BankAccount> bankAccountList = getBankAccount(sqlInteraction,accountType);
+		for(BankAccount b : bankAccountList)
 		{
-			if(b.accountNumber == accountNumber && b.accountType == accountType)
+			if(b.customerID == customerID && b.accountType == accountType)
 				return b;
 		}
 		return null;
 	}
 	
-	
+		
 	public boolean makeOperation(double amount, BankAccount bankAccountSender, int numberAccountReceiver) {
 		try{
 			vectBankAccount = getBankAccount(sqlInteraction, bankAccountSender.accountType);	
-			BankAccount bk = findBankAccount(vectBankAccount, bankAccountSender.accountNumber, bankAccountSender.accountType);
+			BankAccount bk = findBankAccount(bankAccountSender.accountNumber, bankAccountSender.accountType);
 			bk.balance += amount;
 			
 			String requete = "INSERT INTO OPERATION (SENDER, RECEIVER, AMOUNT, DATE) VALUES ("+bankAccountSender.accountNumber+","
