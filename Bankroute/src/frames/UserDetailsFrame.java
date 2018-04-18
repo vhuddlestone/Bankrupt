@@ -40,6 +40,8 @@ public class UserDetailsFrame extends JFrame {
 	private JTextField addressInput;
 	private JTextField mailInput;
 	private JTextField passwordInput;
+	
+	
 
 	/**
 	 * Create the frame for a new user, withour pre-setted informations

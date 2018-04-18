@@ -1,13 +1,18 @@
 package frames;
 
 import com.bankroute.datatools.SQLInteraction;
+import com.bankroute.user.Customer;
 import com.bankroute.user.User;
 
 import static javax.swing.JOptionPane.*;
 
+import java.awt.EventQueue;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 
 
@@ -77,43 +82,46 @@ public class LoginFrame extends javax.swing.JFrame {
 		ApllicationNameLabel.setText("Bankrupt");
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
-				.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		layout.setHorizontalGroup(
+			layout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(layout.createSequentialGroup()
+					.addGroup(layout.createParallelGroup(Alignment.LEADING)
 						.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addGroup(layout.createSequentialGroup().addGap(91, 91, 91)
-												.addComponent(UserNameLabel).addGap(18, 18, 18))
-										.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-												layout.createSequentialGroup().addContainerGap()
-														.addComponent(PasswordLabel).addGap(38, 38, 38)))
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-										.addComponent(UserNameImput, javax.swing.GroupLayout.DEFAULT_SIZE, 167,
-												Short.MAX_VALUE)
-										.addComponent(PasswordImput)))
-						.addGroup(layout.createSequentialGroup().addGap(162, 162, 162)
-								.addComponent(ApllicationNameLabel)))
-				.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-						layout.createSequentialGroup().addGap(0, 135, Short.MAX_VALUE).addComponent(ConnectButton,
-								javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addGap(116, 116, 116)));
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(ApllicationNameLabel)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(UserNameImput, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+							.addGap(81)
+							.addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addComponent(PasswordLabel)
 								.addComponent(UserNameLabel))
-						.addGap(14, 14, 14)
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(PasswordImput, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addComponent(PasswordLabel))
-						.addGap(43, 43, 43).addComponent(ConnectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 57,
-								javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addGap(35, 35, 35)));
+							.addGap(28)
+							.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(UserNameImput, GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
+								.addComponent(PasswordImput)))
+						.addGroup(layout.createSequentialGroup()
+							.addGap(162)
+							.addComponent(ApllicationNameLabel)))
+					.addContainerGap(87, Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup()
+					.addGap(0, 135, Short.MAX_VALUE)
+					.addComponent(ConnectButton, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
+					.addGap(116))
+		);
+		layout.setVerticalGroup(
+			layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(ApllicationNameLabel)
+					.addPreferredGap(ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(UserNameImput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(UserNameLabel))
+					.addGap(14)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(PasswordImput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(PasswordLabel))
+					.addGap(43)
+					.addComponent(ConnectButton, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+					.addGap(35))
+		);
+		getContentPane().setLayout(layout);
 
 		UserNameImput.getAccessibleContext().setAccessibleName("");
 		UserNameImput.getAccessibleContext().setAccessibleDescription("");
@@ -135,53 +143,19 @@ public class LoginFrame extends javax.swing.JFrame {
 					"Role of user: " + sQLInteraction.connectUser(UserNameImput.getText(), PasswordImput.getText()));
 			User currentUser = sQLInteraction.connectUser(UserNameImput.getText(), PasswordImput.getText());
 			if (currentUser != null) {
-				switch (currentUser.getRole()) {
-					case bankerRole: 
-						UserViewFrame userViewFrame=new UserViewFrame(currentUser);
-						userViewFrame.setVisible(true);
-						this.setVisible(false);
-						break;	
+				UserInterfaceFrame frame = new UserInterfaceFrame(currentUser);
+				frame.setVisible(true);
+					
 				}
 			}
 
 		}
-	}
+	
 
 	/**
 	 * @param args
 	 *            the command line arguments
 	 */
-	public static void main(String args[]) {
-		/* Set the Nimbus look and feel */
-		// <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
-		// (optional) ">
-		/*
-		 * If Nimbus (introduced in Java SE 6) is not available, stay with the default
-		 * look and feel. For details see
-		 * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-		 */
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
-		}
-		// </editor-fold>
-	}
 
 	// Variables declaration - do not modify
 	private javax.swing.JLabel ApllicationNameLabel;
