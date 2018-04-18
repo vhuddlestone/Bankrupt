@@ -237,7 +237,7 @@ public class UserViewFrame extends javax.swing.JFrame {
 	 */
 	private DefaultTableModel parseUserToJTableModel(Vector<User> vectUser) {
 		DefaultTableModel modelTable = new DefaultTableModel();
-		String header[] = { "id", "firstname", "lastname", "password", "mail", "address", "role", "" };
+		String header[] = { "id", "Nom", "Prenom", "Mot de passe", "Mail", "Addresse", "Rôle" };
 
 		modelTable.setColumnIdentifiers(header);
 
@@ -253,7 +253,6 @@ public class UserViewFrame extends javax.swing.JFrame {
 
 			modelTable.addRow(model);
 		}
-		
 		return modelTable;
 	}
 

@@ -57,12 +57,9 @@ public class UserInterfaceFrame extends JFrame {
 			fullName = firstName + " " + lastName;
 		}
 		
-		initComponentsBanker();
 		switch(userConnected.getRole()) {
 		case customerRole:
 			initComponentsUser();
-			break;
-		case adminRole:
 			break;
 		case bankerRole:
 			initComponentsBanker();
@@ -110,27 +107,49 @@ public class UserInterfaceFrame extends JFrame {
 			}
 		});
 		
+		JButton editCurrentAccount = new JButton("Modifier votre compte client");
+		editCurrentAccount.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserDetailsFrame frame = new UserDetailsFrame(sqlInteraction,currentUser, 0);
+				frame.setVisible(true);
+			}
+		});
+		
+		JButton disconnectButton = new JButton("D\u00E9connexion");
+		disconnectButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				LoginFrame frame = new LoginFrame(sqlInteraction);
+				frame.setVisible(true);
+			}
+		});
+		
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(roleLabel, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(468, Short.MAX_VALUE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(65, Short.MAX_VALUE)
-					.addComponent(helloLabel, GroupLayout.PREFERRED_SIZE, 448, GroupLayout.PREFERRED_SIZE)
-					.addGap(56))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(168, Short.MAX_VALUE)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnSupprimerLeCompte, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(createBankAccountButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(checkBankAccountButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(externalTransfertButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(btnVirerDeLargent, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-					.addGap(158))
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_contentPane.createSequentialGroup()
+								.addComponent(roleLabel, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 363, Short.MAX_VALUE)
+								.addComponent(disconnectButton, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap())
+							.addGroup(gl_contentPane.createSequentialGroup()
+								.addComponent(helloLabel, GroupLayout.PREFERRED_SIZE, 448, GroupLayout.PREFERRED_SIZE)
+								.addGap(56)))
+						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(editCurrentAccount, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnSupprimerLeCompte, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(createBankAccountButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(checkBankAccountButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(externalTransfertButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(btnVirerDeLargent, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+							.addGap(158))))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -147,8 +166,12 @@ public class UserInterfaceFrame extends JFrame {
 					.addComponent(btnVirerDeLargent)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnSupprimerLeCompte)
-					.addPreferredGap(ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
-					.addComponent(roleLabel)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(editCurrentAccount)
+					.addPreferredGap(ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(roleLabel)
+						.addComponent(disconnectButton))
 					.addContainerGap())
 		);
 		contentPane.setLayout(gl_contentPane);
@@ -200,27 +223,60 @@ public class UserInterfaceFrame extends JFrame {
 			}
 		});
 		
+		JButton createCustomerButton = new JButton("Créer un compte client");
+		createCustomerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				UserDetailsFrame frame = new UserDetailsFrame(sqlInteraction);
+				frame.setVisible(true);
+			}
+		});
+		
+		JButton disconnectButton = new JButton("D\u00E9connexion");
+		disconnectButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				LoginFrame frame = new LoginFrame(sqlInteraction);
+				frame.setVisible(true);
+			}
+		});
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(roleLabel, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(468, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED, 363, Short.MAX_VALUE)
+					.addComponent(disconnectButton)
+					.addContainerGap())
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(168)
+					.addComponent(btnSupprimerLeCompte, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+					.addGap(158))
+				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+					.addGap(168)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(createCustomerButton, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap())
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(showCustomerListButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addGap(158))))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(168)
+					.addComponent(btnVirerDeLargent, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGap(158))
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGap(168)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(createBankAccountButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+						.addComponent(checkBankAccountButton, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
+						.addComponent(externalTransfertButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addGap(158))
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap(65, Short.MAX_VALUE)
 					.addComponent(helloLabel, GroupLayout.PREFERRED_SIZE, 448, GroupLayout.PREFERRED_SIZE)
 					.addGap(56))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(168, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(btnSupprimerLeCompte, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-						.addComponent(createBankAccountButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(checkBankAccountButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(externalTransfertButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(btnVirerDeLargent, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(showCustomerListButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addGap(158))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -239,12 +295,14 @@ public class UserInterfaceFrame extends JFrame {
 					.addComponent(btnSupprimerLeCompte)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(showCustomerListButton)
-					.addPreferredGap(ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
-					.addComponent(roleLabel)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(createCustomerButton)
+					.addPreferredGap(ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(roleLabel)
+						.addComponent(disconnectButton))
 					.addContainerGap())
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
-	
-	
 }

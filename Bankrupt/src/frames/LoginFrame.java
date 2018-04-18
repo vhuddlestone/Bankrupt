@@ -13,6 +13,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JButton;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -55,73 +58,91 @@ public class LoginFrame extends javax.swing.JFrame {
 		ApllicationNameLabel = new javax.swing.JLabel();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		
+		UserNameLabel.setFont(new Font("Tahoma", Font.PLAIN, 18)); // NOI18N
+		UserNameLabel.setText("Utilisateur");
 
-		UserNameLabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-		UserNameLabel.setText("UserName");
-
-		PasswordLabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-		PasswordLabel.setText("Password");
+		PasswordLabel.setFont(new Font("Tahoma", Font.PLAIN, 18)); // NOI18N
+		PasswordLabel.setText("Mot de passe");
 
 		ConnectButton.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-		ConnectButton.setText("Connect");
+		ConnectButton.setText("Connexion");
 		ConnectButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				ConnectButtonActionPerformed(evt);
 			}
 		});
 
-		UserNameImput.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+		UserNameImput.setFont(new Font("Tahoma", Font.PLAIN, 16)); // NOI18N
 		UserNameImput.setName("UserNameImput"); // NOI18N
 
-		PasswordImput.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+		PasswordImput.setFont(new Font("Tahoma", Font.PLAIN, 16)); // NOI18N
 		PasswordImput.setName("PasswordImput"); // NOI18N
 
-		ApllicationNameLabel.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+		ApllicationNameLabel.setFont(new Font("Tahoma", Font.BOLD, 26)); // NOI18N
 		ApllicationNameLabel.setText("Bankrupt");
-
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup(Alignment.LEADING)
-										.addGroup(layout.createSequentialGroup().addGap(81)
-												.addGroup(layout.createParallelGroup(Alignment.LEADING)
-														.addComponent(PasswordLabel).addComponent(UserNameLabel))
-												.addGap(28)
-												.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-														.addComponent(UserNameImput, GroupLayout.DEFAULT_SIZE, 167,
-																Short.MAX_VALUE)
-														.addComponent(PasswordImput)))
-										.addGroup(layout.createSequentialGroup().addGap(162)
-												.addComponent(ApllicationNameLabel)))
-								.addContainerGap(87, Short.MAX_VALUE))
-						.addGroup(layout.createSequentialGroup().addGap(0, 135, Short.MAX_VALUE)
-								.addComponent(ConnectButton, GroupLayout.PREFERRED_SIZE, 223,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(116)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(ApllicationNameLabel)
-						.addPreferredGap(ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(UserNameImput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(UserNameLabel))
-						.addGap(14)
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(PasswordImput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(PasswordLabel))
-						.addGap(43)
-						.addComponent(ConnectButton, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-						.addGap(35)));
-		getContentPane().setLayout(layout);
+		
+		JButton newUserButton = new JButton("Nouveau Client");
+		newUserButton.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		newUserButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				newUserButtonClicked(evt);
+			}
+		});
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(39)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(PasswordLabel)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(PasswordImput, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE))
+						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+							.addComponent(UserNameLabel)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(ApllicationNameLabel)
+								.addComponent(UserNameImput, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE))))
+					.addGap(46))
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addContainerGap(132, Short.MAX_VALUE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(newUserButton, GroupLayout.PREFERRED_SIZE, 213, GroupLayout.PREFERRED_SIZE)
+						.addComponent(ConnectButton, GroupLayout.PREFERRED_SIZE, 209, GroupLayout.PREFERRED_SIZE))
+					.addGap(112))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(ApllicationNameLabel)
+					.addGap(36)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(UserNameLabel)
+						.addComponent(UserNameImput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(PasswordLabel)
+						.addComponent(PasswordImput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(ConnectButton, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(newUserButton, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
+					.addGap(18))
+		);
+		getContentPane().setLayout(groupLayout);
 
 		UserNameImput.getAccessibleContext().setAccessibleName("");
 		UserNameImput.getAccessibleContext().setAccessibleDescription("");
 		PasswordImput.getAccessibleContext().setAccessibleName("PasswordImput");
-
+		setBounds(100, 100, 587, 404);
 		pack();
 	}// </editor-fold>
+
+	
+	//						.addComponent(newUserButton, GroupLayout.PREFERRED_SIZE, 213, GroupLayout.PREFERRED_SIZE))
 
 	private void ConnectButtonActionPerformed(java.awt.event.ActionEvent evt) {
 		System.out.println(UserNameImput.getText().isEmpty() + " | " + PasswordImput.getText().isEmpty());
@@ -140,6 +161,11 @@ public class LoginFrame extends javax.swing.JFrame {
 			dispose();
 		}
 	}
+	
+	private void newUserButtonClicked(ActionEvent evt) {
+		UserDetailsFrame newUserFrame= new UserDetailsFrame(sQLInteraction);
+		newUserFrame.setVisible(true);
+	}
 
 	/**
 	 * @param args
@@ -153,5 +179,4 @@ public class LoginFrame extends javax.swing.JFrame {
 	private javax.swing.JLabel PasswordLabel;
 	private javax.swing.JTextField UserNameImput;
 	private javax.swing.JLabel UserNameLabel;
-	// End of variables declaration
 }

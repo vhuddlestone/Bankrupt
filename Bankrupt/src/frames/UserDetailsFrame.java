@@ -139,7 +139,11 @@ public class UserDetailsFrame extends JFrame {
 		});
 
 		JButton CancelButton = new JButton("Quitter");
-
+		CancelButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				dispose();
+			}
+		});
 		/* Gestion affichage des éléments */
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
