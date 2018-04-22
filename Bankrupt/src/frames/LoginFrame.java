@@ -156,7 +156,7 @@ public class LoginFrame extends javax.swing.JFrame {
 			System.out.println(
 					"Role of user: " + sQLInteraction.connectUser(UserNameImput.getText(), PasswordImput.getText()));
 			User currentUser = sQLInteraction.connectUser(UserNameImput.getText(), PasswordImput.getText());
-			UserInterfaceFrame userInterfaceFrame = new UserInterfaceFrame(currentUser);
+			UserInterfaceFrame userInterfaceFrame = new UserInterfaceFrame(currentUser, sQLInteraction);
 			userInterfaceFrame.setVisible(true);
 			dispose();
 		}

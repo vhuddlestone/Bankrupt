@@ -45,14 +45,14 @@ public class UserInterfaceFrame extends JFrame {
 
 	//int id, String address, String firstName,String lastName, String mail, String password, int role, SQLInteraction sqlInteraction, int councillor
 	
-	public UserInterfaceFrame(User userConnected) {
+	public UserInterfaceFrame(User userConnected, SQLInteraction sqlInteraction) {
 		if (userConnected != null) {
 			this.firstName = userConnected.getFirstName();
 			this.lastName = userConnected.getLastName();
 			this.address = userConnected.getAddress();
 			this.mail = userConnected.getMail();
 			this.password = userConnected.getPassword();
-			this.sqlInteraction=userConnected.getSQLInstance();
+			this.sqlInteraction=sqlInteraction;
 			this.currentUser = userConnected;
 			fullName = firstName + " " + lastName;
 		}
@@ -121,6 +121,13 @@ public class UserInterfaceFrame extends JFrame {
 				dispose();
 				LoginFrame frame = new LoginFrame(sqlInteraction);
 				frame.setVisible(true);
+			}
+		});
+		
+		createBankAccountButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MakeOperationFrame makeOperationFrame= new MakeOperationFrame(currentUser, sqlInteraction);
+				makeOperationFrame.setVisible(true);
 			}
 		});
 		
@@ -218,7 +225,7 @@ public class UserInterfaceFrame extends JFrame {
 		JButton showCustomerListButton = new JButton("Consulter la liste de vos clients");
 		showCustomerListButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UserViewFrame frame = new UserViewFrame(currentUser);
+				UserViewFrame frame = new UserViewFrame(currentUser, sqlInteraction);
 				frame.setVisible(true);
 			}
 		});
@@ -239,6 +246,14 @@ public class UserInterfaceFrame extends JFrame {
 				frame.setVisible(true);
 			}
 		});
+		
+		createBankAccountButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MakeOperationFrame makeOperationFrame= new MakeOperationFrame(currentUser, sqlInteraction);
+				makeOperationFrame.setVisible(true);
+			}
+		});
+		
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(

@@ -76,7 +76,6 @@ public class UserDetailsFrame extends JFrame {
 			this.address = user.getAddress();
 			this.mail = user.getMail();
 			this.password = user.getPassword();
-			this.sqlInteraction=user.getSQLInstance();
 			this.id=user.getId();
 		}
 	}

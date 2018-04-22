@@ -53,14 +53,14 @@ public class CreateBankAccountFrame extends JFrame {
 	 * Create the frame for edit a user
 	 * @wbp.parser.constructor
 	 */
-	public CreateBankAccountFrame(User userToEdit) {
+	public CreateBankAccountFrame(User userToEdit, SQLInteraction sqlInteraction) {
 		if (userToEdit != null) {
 			this.firstName = userToEdit.getFirstName();
 			this.lastName = userToEdit.getLastName();
 			this.address = userToEdit.getAddress();
 			this.mail = userToEdit.getMail();
 			this.password = userToEdit.getPassword();
-			this.sqlInteraction=userToEdit.getSQLInstance();
+			this.sqlInteraction=sqlInteraction;
 		}
 		initComponents();
 	}

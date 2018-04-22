@@ -5,18 +5,11 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 
-import com.bankroute.datatools.SQLInteraction;
-import com.bankroute.tools.CustomerAccountManagement;
 import com.bankroute.user.Banker;
+import com.bankroute.user.Customer;
 import com.bankroute.user.User;
-
-import static javax.swing.JOptionPane.WARNING_MESSAGE;
-import static javax.swing.JOptionPane.showMessageDialog;
-
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout;
@@ -36,28 +29,33 @@ public class UserViewFrame extends javax.swing.JFrame {
 	static final int customerRole = 1;
 	static final int adminRole = 3;
 	private User currentUser;
-	private CustomerAccountManagement customerAccountManagement;
-	Vector<User> vectCustomers;
-	private SQLInteraction sqlInteraction;
+
 	/**
 	 * Creates new form UserViewFrame
 	 */
-	public UserViewFrame(User user, SQLInteraction sqlInteraction) {
+	public UserViewFrame(User user) {
 		initComponents();
 		this.currentUser = user;
-		this.vectCustomers = currentUser.getCustomersInCharge();
-		this.sqlInteraction=sqlInteraction;
-		switch (user.getRole()){
-			case bankerRole:
-				
-				break;
-			case adminRole:
-			
-				break;
-		}
-		customerAccountManagement= new CustomerAccountManagement(sqlInteraction);
 		Vector<User> vectUser = user.getCustomersInCharge();
-		DefaultTableModel modelTable = parseUserToJTableModel(vectUser);
+
+		String header[] = { "id", "firstname", "lastname", "password", "mail", "address", "role", "" };
+
+		DefaultTableModel modelTable = new DefaultTableModel();
+		modelTable.setColumnIdentifiers(header);
+
+		for (User customer : vectUser) {
+			Object[] model = new Object[8];
+			model[0] = customer.getId();
+			model[1] = customer.getFirstName();
+			model[2] = customer.getLastName();
+			model[3] = customer.getPassword();
+			model[4] = customer.getMail();
+			model[5] = customer.getAddress();
+			model[6] = customer.getRole();
+
+			modelTable.addRow(model);
+		}
+
 		UserTable.setModel(modelTable);
 	}
 
@@ -69,14 +67,13 @@ public class UserViewFrame extends javax.swing.JFrame {
 	@SuppressWarnings("unchecked")
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents() {
-		
+
 		jScrollPane1 = new javax.swing.JScrollPane();
 		AddUserButton = new javax.swing.JButton();
 		UserTable = new javax.swing.JTable();
 		DeleteUserButton = new javax.swing.JButton();
-		
-		setResizable(false);
-		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
 		UserTable.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
 		UserTable.setModel(new javax.swing.table.DefaultTableModel(new Object[][] {
@@ -138,43 +135,6 @@ public class UserViewFrame extends javax.swing.JFrame {
 				EditUserButtonActionPerformed(evt);
 			}
 		});
-		
-		UserTable.addMouseListener(new MouseListener(){
-		    @Override
-		    public void mouseClicked(MouseEvent e){
-		        if(e.getClickCount()==2){
-		        	User selectedCustomer= getSelectedUser();
-		        	if(selectedCustomer!=null) {
-		        		CustomerAccountsFrame customerAccoutsFrame= new CustomerAccountsFrame(selectedCustomer, sqlInteraction);
-		        		customerAccoutsFrame.setVisible(true);
-		        	}
-		        }
-		    }
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
@@ -205,54 +165,55 @@ public class UserViewFrame extends javax.swing.JFrame {
 	}// </editor-fold>
 
 	private void DeleteUserButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		User userTodelete= getSelectedUser();
-		if(userTodelete  !=null) {
-			String error=customerAccountManagement.deleteUser(userTodelete.getId());
-			if(error !="") {
-				showMessageDialog(null, error, "Erreur durant la suppression", WARNING_MESSAGE);
-			}
-			updateTable();
-		}else {
-			showMessageDialog(null, "Sélectionner un utilisateur dans le tableau avant d'essayer de le supprimer", "Erreur de suppression", WARNING_MESSAGE);
-		}
+		// TODO add your handling code here:
 	}
 
 	private void AddUserButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		UserDetailsFrame userCreateFrame = new UserDetailsFrame(sqlInteraction,null, currentUser.getId());
-		System.out.println("currentUserId:="+currentUser.getId());
-		userCreateFrame.addWindowListener(new java.awt.event.WindowAdapter() {
-			@Override
-			public void windowClosed(java.awt.event.WindowEvent e) {
-				updateTable();
-			}
-		});
-		 userCreateFrame.setVisible(true);
+		UserDetailsFrame userCreateFrame = new UserDetailsFrame(currentUser.getSQLInstance());
+		userCreateFrame.setVisible(true);
 	}
 
 	private void EditUserButtonActionPerformed(ActionEvent evt) {
-		User userToEdit = getSelectedUser();
-		if(userToEdit!=null) {
-			UserDetailsFrame editUserFrame = new UserDetailsFrame(sqlInteraction,userToEdit, currentUser.getId());
-			editUserFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+		if (UserTable.getSelectedRow() != -1) {
+			int userId = (int) UserTable.getValueAt(UserTable.getSelectedRow(), 0);
+			System.out.println(userId);
+			Vector<User> vectCustomers = currentUser.getCustomersInCharge();
+			User userToEdit = null;
+
+			for (User customer : vectCustomers) {
+				if (customer.getId() == userId) {
+					userToEdit = customer;
+					break;
+				}
+			}
+
+			// userToEdit=new Customer(userId,"address
+			// test","Jean","Jaques","jean.jaques@ok.fr","password", 1,
+			// currentUser.getSQLInstance(), 2);
+			UserDetailsFrame addUserFrame = new UserDetailsFrame(userToEdit);
+			addUserFrame.addWindowListener(new java.awt.event.WindowAdapter() {
 				@Override
-				public void windowClosed(java.awt.event.WindowEvent e) {
-					updateTable();
-					System.out.println("maj apres edit");
+				public void windowClosing(java.awt.event.WindowEvent e) {
+					System.out.println("TEST CLOSURE");
 				}
 			});
-			editUserFrame.setVisible(true);
-		}else {
-			showMessageDialog(null, "Sélectionnez un utilisateur du tableau à éditer", "Impossible d'éditer", WARNING_MESSAGE);
+			addUserFrame.setVisible(true);
 		}
+		UserDetailsFrame test = new UserDetailsFrame(this.currentUser.getSQLInstance());
+		test.addWindowListener(new java.awt.event.WindowAdapter() {
+			@Override
+			public void windowClosing(java.awt.event.WindowEvent e) {
+				updateTable();
+			}
+		});
+		test.setVisible(true);
+
 	}
 
 	private void updateTable() {
 		switch(this.currentUser.getRole()) {
 		case bankerRole:
-			Vector<User> newCustomersInCharge;
-			newCustomersInCharge=sqlInteraction.getClientsFromBankerId(currentUser.getId());
-			currentUser= new Banker(currentUser.getId(),currentUser.getAddress(), currentUser.getFirstName(), currentUser.getLastName(),currentUser.getMail(), currentUser.getPassword(), currentUser.getRole(),newCustomersInCharge);
-			UserTable.setModel(parseUserToJTableModel(newCustomersInCharge));
+			
 			break;
 		case adminRole:
 			
@@ -261,54 +222,6 @@ public class UserViewFrame extends javax.swing.JFrame {
 			
 			break;
 		}
-	}
-	
-	private User getSelectedUser() {
-		User selectedUser=null;
-		if (UserTable.getSelectedRow() != -1) {
-			int userId = (int) UserTable.getValueAt(UserTable.getSelectedRow(), 0);
-
-			for (User customer : vectCustomers) {
-				if (customer.getId() == userId) {
-					selectedUser = customer;
-					break;
-				}
-			}
-		}
-		return selectedUser;
-	}
-	
-	/**
-	 * function who parse a vector of user on a table model who can be used to display data on JTable 
-	 * @param vectUser 
-	 * @return table Model
-	 */
-	private DefaultTableModel parseUserToJTableModel(Vector<User> vectUser) {
-		DefaultTableModel modelTable = new DefaultTableModel(){
-
-		    @Override
-		    public boolean isCellEditable(int row, int column) {
-		       //all cells false
-		       return false;
-		    }
-		};
-		String header[] = { "id", "Nom", "Prenom", "Mot de passe", "Mail", "Addresse", "Rôle" };
-
-		modelTable.setColumnIdentifiers(header);
-
-		for (User customer : vectUser) {
-			Object[] model = new Object[8];
-			model[0] = customer.getId();
-			model[1] = customer.getFirstName();
-			model[2] = customer.getLastName();
-			model[3] = customer.getPassword();
-			model[4] = customer.getMail();
-			model[5] = customer.getAddress();
-			model[6] = customer.getRole();
-
-			modelTable.addRow(model);
-		}
-		return modelTable;
 	}
 
 	/**
