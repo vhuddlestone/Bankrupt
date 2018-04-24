@@ -23,8 +23,8 @@ public class Banker extends User {
 			this.customers = customers;
 		}
 
-		public Banker(int id, String address, String firstName,String lastName, String mail, String password, int role, SQLInteraction sqlInteraction, Vector<User> vectClients)  {
-			super(id,address,firstName, lastName, mail, password, role, sqlInteraction);
+		public Banker(int id, String address, String firstName,String lastName, String mail, String password, int role, Vector<User> vectClients)  {
+			super(id,address,firstName, lastName, mail, password, role);
 			this.customers=vectClients;
 		}
 

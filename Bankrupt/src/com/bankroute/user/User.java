@@ -20,7 +20,6 @@ public abstract class User {
 	protected int role;
 	protected AccountManagement accountManagement;
 	protected OperationManagement operationManagement;
-	protected SQLInteraction sqlInteraction;
 	
 	public User() {
 		this.address = "XXX";
@@ -32,7 +31,7 @@ public abstract class User {
 	}
 	
 	public User(int id, String address, String firstName,
-			String lastName, String mail, String password, int role, SQLInteraction sqlInteraction) {
+			String lastName, String mail, String password, int role) {
 		
 		this.id=id;
 		this.address = address;
@@ -41,8 +40,6 @@ public abstract class User {
 		this.mail = mail;
 		this.password = password;
 		this.role = role;
-		this.sqlInteraction=sqlInteraction;
-		this.accountManagement = new CustomerAccountManagement(sqlInteraction);
 		//this.operationManagement = new CustomerOperation();
 		
 	}
@@ -93,9 +90,6 @@ public abstract class User {
 	}
 	public void setRole(int role) {
 		this.role = role;
-	}
-	public SQLInteraction getSQLInstance() {
-		return this.sqlInteraction;
 	}
 	
 	@Override

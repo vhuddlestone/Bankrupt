@@ -47,11 +47,11 @@ public class CustomerAccountManagement implements AccountManagement {
 				switch(role) {
 				case customerRole:
 					int councillor_id=getCouncillorIdFromClientId(userId);
-					vectUser.add(new Customer(rs.getInt("id"), rs.getString("address"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("mail"), rs.getString("password"),customerRole, sqlInteraction,councillor_id));
+					vectUser.add(new Customer(rs.getInt("id"), rs.getString("address"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("mail"), rs.getString("password"),customerRole,councillor_id));
 					break;
 				case bankerRole:
 					Vector<User> customers = getClientsFromBankerId(userId);
-					vectUser.add(new Banker(userId, rs.getString("address"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), bankerRole, sqlInteraction, customers));
+					vectUser.add(new Banker(userId, rs.getString("address"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), bankerRole, customers));
 				break;
 				case adminRole:
 					//vectUser.add(new Banker(rs.getInt("id"), rs.getString("address"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("mail"), rs.getString("password")));
@@ -101,7 +101,7 @@ public class CustomerAccountManagement implements AccountManagement {
 		try {
 			vectClients=new Vector<User>();
 			while(rs.next()) {
-				vectClients.add(new Customer(rs.getInt("id"), rs.getString("address"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("mail"), rs.getString("password"),customerRole, sqlInteraction,id));
+				vectClients.add(new Customer(rs.getInt("id"), rs.getString("address"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("mail"), rs.getString("password"),customerRole,id));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

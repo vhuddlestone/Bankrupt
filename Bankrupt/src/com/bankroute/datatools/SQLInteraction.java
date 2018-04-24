@@ -82,7 +82,7 @@ public final class SQLInteraction {
 		User user = null;
 
 		password = MD5Encryption.encrypteString(password);
-		String requete = "Select * FROM USER WHERE mail='" + userName + "' AND password='" + password + "'";
+		String requete = "Select * FROM user WHERE mail='" + userName + "' AND password='" + password + "'";
 
 		rs = executeQuery(requete);
 
@@ -94,14 +94,13 @@ public final class SQLInteraction {
 				case customerRole:
 					int councillor_id = getCouncillorIdFromClientId(userId);
 					user = new Customer(userId, rs.getString("address"), rs.getString("firstName"),
-							rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), customerRole,
-							this, councillor_id);
+							rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), customerRole, councillor_id);
 					break;
 				case bankerRole:
 					requete = "SELECT * FROM user WHERE user.id=" + userId;
 					Vector<User> clients = getClientsFromBankerId(userId);
 					user = new Banker(userId, rs.getString("address"), rs.getString("firstName"),
-							rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), bankerRole, this,
+							rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), bankerRole,
 							clients);
 					break;
 				}
@@ -125,7 +124,7 @@ public final class SQLInteraction {
 			vectClients = new Vector<User>();
 			while (rs.next()) {
 				vectClients.add(new Customer(rs.getInt("id"), rs.getString("address"), rs.getString("firstName"),
-						rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), customerRole, this,
+						rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), customerRole,
 						id));
 			}
 		} catch (SQLException e) {

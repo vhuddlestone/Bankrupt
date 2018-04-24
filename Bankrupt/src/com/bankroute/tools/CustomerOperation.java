@@ -25,8 +25,14 @@ public class CustomerOperation implements OperationManagement {
 	public CustomerOperation(SQLInteraction sqlInteraction){
 		this.sqlInteraction=sqlInteraction;
 	}
+
+	@Override
+	public boolean makeOperation(double amount, BankAccount bankAccountSender, int numberAccountReceiver) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
-	private Vector<BankAccount> getBankAccount(SQLInteraction sqlInteraction, int type){
+	/*private Vector<BankAccount> getBankAccount(SQLInteraction sqlInteraction, int type){
 		Vector<BankAccount> vectBankAccount=null;
 		String requete = "SELECT * FROM BANKACCOUNT";
 		ResultSet rs=sqlInteraction.executeQuery(requete);
@@ -34,16 +40,16 @@ public class CustomerOperation implements OperationManagement {
 		try {
 				vectBankAccount= new Vector<BankAccount>();
 				while(rs.next())
-					vectBankAccount.add(new CurrentAccount(rs.getDouble("balance"),rs.getInt("accountNumber"),rs.getInt("customerID"),rs.getInt("accountType"),sqlInteraction));
+					vectBankAccount.add(new CurrentAccount(rs.getDouble("balance"),rs.getInt("accountNumber"),rs.getInt("customerID"),rs.getInt("accountType")));
 			}
 		
 		 catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return vectBankAccount;
-	}
+	}*/
 	
-	BankAccount findBankAccount(int customerID, int accountType)
+	/*BankAccount findBankAccount(int customerID, int accountType)
 	{
 		Vector<BankAccount> bankAccountList = getBankAccount(sqlInteraction,accountType);
 		for(BankAccount b : bankAccountList)
@@ -52,10 +58,10 @@ public class CustomerOperation implements OperationManagement {
 				return b;
 		}
 		return null;
-	}
+	}*/
 	
 		
-	public boolean makeOperation(double amount, BankAccount bankAccountSender, int numberAccountReceiver) {
+	/*public boolean makeOperation(double amount, BankAccount bankAccountSender, int numberAccountReceiver) {
 		try{
 			vectBankAccount = getBankAccount(sqlInteraction, bankAccountSender.accountType);	
 			BankAccount bk = findBankAccount(bankAccountSender.accountNumber, bankAccountSender.accountType);
@@ -72,5 +78,5 @@ public class CustomerOperation implements OperationManagement {
 		catch(Exception e) {
 			return false;
 		}
-	}	
+	}	*/
 }
