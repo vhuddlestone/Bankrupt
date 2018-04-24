@@ -5,11 +5,15 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.DefaultListModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import com.bankroute.bankaccount.BankAccount;
+import com.bankroute.bankaccount.Operation;
 import com.bankroute.datatools.SQLInteraction;
 import com.bankroute.tools.BankAccountManager;
+import com.bankroute.tools.CustomerOperation;
 import com.bankroute.tools.Values;
 import com.bankroute.user.User;
 
@@ -23,13 +27,16 @@ public class CustomerAccountsFrame extends javax.swing.JFrame {
      * Creates new form CustomerAccountsFrame
      */
 	private SQLInteraction sqlInteraction;
+	private int selectedAccountIndex=-1;
 	
 	private BankAccountManager bankAccountManager;
+	private CustomerOperation customerOperations;
+	
     public CustomerAccountsFrame(User user, SQLInteraction sqlInteraction) {
         initComponents();
         this.sqlInteraction=sqlInteraction;
         bankAccountManager=new BankAccountManager(sqlInteraction);
-        
+        customerOperations= new CustomerOperation(sqlInteraction);
         Vector<BankAccount> vectAccounts = bankAccountManager.getUserAccounts(user);
         DefaultListModel listModel=parseAccountsToJListModel(vectAccounts);
         accountList.setModel(listModel);
@@ -59,6 +66,18 @@ public class CustomerAccountsFrame extends javax.swing.JFrame {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
+        });
+        accountList.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent arg0) {
+				if(selectedAccountIndex != accountList.getSelectedIndex()) {
+					selectedAccountIndex=accountList.getSelectedIndex();
+					updateOperationsList(selectedAccountIndex);
+				}else {
+					
+				}					
+			}
         });
         jScrollPane1.setViewportView(accountList);
 
@@ -110,6 +129,38 @@ public class CustomerAccountsFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>                        
+    private DefaultListModel parseOperationsToJListModel(Vector<Object> vectObjet) {
+    	DefaultListModel modelList = new DefaultListModel();
+    	
+    	//TODO TOFINISH
+    	int index=0;
+		for (Object objet : vectObjet) {
+			Object[] model = new Object[8];
+			ArrayList<String> list = new ArrayList<String>();
+			list.add(String.valueOf(account.getAmount()));
+
+			if(selectedAccountIndex==account.getReceiver()) {
+				model[0]=account.getSender();
+				model
+			}else {
+				model[0]=account.getReceiver();
+			}
+			list.add(String.valueOf(account.()));
+			list.add(String.valueOf(account.getAccountType()));
+			list.add(String.valueOf(account.getAccountNumber()));
+			/*model[0] = account.getAccountNumber();
+			model[1] = account.getAccountType();
+			model[2] = account.getBalance();*/
+
+			modelList.insertElementAt(model, index);
+			modelList.set
+			index++;
+		}
+		return modelList;
+    }
+    
+    
+    
     
     private DefaultListModel parseAccountsToJListModel(Vector<BankAccount> vectAccounts) {
     	DefaultListModel modelList = new DefaultListModel();
@@ -135,6 +186,15 @@ public class CustomerAccountsFrame extends javax.swing.JFrame {
 			index++;
 		}
 		return modelList;
+	}
+    
+	private void updateOperationsList(int selectedAccountIndex) {
+		Vector<Operation> operationsVect= new Vector<Operation>();
+		operationsVect=customerOperations.getOperationsOfAccount( selectedAccountIndex);
+		
+		for(Operation operation: operationsVect) {
+			
+		}
 	}
 
     // Variables declaration - do not modify                     

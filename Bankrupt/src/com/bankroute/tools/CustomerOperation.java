@@ -10,6 +10,7 @@ import java.io.*;
 
 import com.bankroute.bankaccount.BankAccount;
 import com.bankroute.bankaccount.CurrentAccount;
+import com.bankroute.bankaccount.Operation;
 import com.bankroute.datatools.SQLInteraction;
 import com.bankroute.user.Banker;
 import com.bankroute.user.Customer;
@@ -26,29 +27,7 @@ public class CustomerOperation implements OperationManagement {
 		this.sqlInteraction=sqlInteraction;
 	}
 
-	@Override
-	public boolean makeOperation(double amount, BankAccount bankAccountSender, int numberAccountReceiver) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	/*private Vector<BankAccount> getBankAccount(SQLInteraction sqlInteraction, int type){
-		Vector<BankAccount> vectBankAccount=null;
-		String requete = "SELECT * FROM BANKACCOUNT";
-		ResultSet rs=sqlInteraction.executeQuery(requete);
-		
-		try {
-				vectBankAccount= new Vector<BankAccount>();
-				while(rs.next())
-					vectBankAccount.add(new CurrentAccount(rs.getDouble("balance"),rs.getInt("accountNumber"),rs.getInt("customerID"),rs.getInt("accountType")));
-			}
-		
-		 catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return vectBankAccount;
-	}*/
-	
+	//TODO AJOUTER LES NOUVEAUX ARGUMENTS DU CONSTRUCTEUR POUR UTILISER
 	/*BankAccount findBankAccount(int customerID, int accountType)
 	{
 		Vector<BankAccount> bankAccountList = getBankAccount(sqlInteraction,accountType);
@@ -61,7 +40,7 @@ public class CustomerOperation implements OperationManagement {
 	}*/
 	
 		
-	/*public boolean makeOperation(double amount, BankAccount bankAccountSender, int numberAccountReceiver) {
+	/*ublic boolean makeOperation(double amount, BankAccount bankAccountSender, int numberAccountReceiver) {
 		try{
 			vectBankAccount = getBankAccount(sqlInteraction, bankAccountSender.accountType);	
 			BankAccount bk = findBankAccount(bankAccountSender.accountNumber, bankAccountSender.accountType);
@@ -79,4 +58,30 @@ public class CustomerOperation implements OperationManagement {
 			return false;
 		}
 	}	*/
+	
+	public Vector<Operation> getOperationsOfAccount(int accountId){
+		Vector<Operation> operationsVect=new Vector<Operation>();
+		
+		String requete="SELECT sender, receiver, amount, date FROM operation WHERE receiver="+accountId+" OR sender="+accountId; 
+		System.out.println(requete);
+		
+		ResultSet result=sqlInteraction.executeQuery(requete);
+		
+		try {
+			while(result.next()) {
+				operationsVect.add(new Operation(result.getInt("sender"), result.getInt("receiver"),result.getDouble("amount"),result.getDate("date")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return operationsVect;
+	}
+
+	@Override
+	public boolean makeOperation(double amount, BankAccount bankAccountSender, int numberAccountReceiver) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	
 }
