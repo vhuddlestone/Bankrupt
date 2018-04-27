@@ -75,6 +75,8 @@ public class UserViewFrame extends javax.swing.JFrame {
 		AddUserButton = new javax.swing.JButton();
 		UserTable = new javax.swing.JTable();
 		DeleteUserButton = new javax.swing.JButton();
+		
+		setResizable(false);
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
 		UserTable.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
