@@ -17,6 +17,8 @@ import com.bankrupt.user.User;
 
 import javax.swing.JLabel;
 import java.awt.Font;
+
+import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -24,6 +26,9 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.swing.JRadioButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -51,6 +56,7 @@ public class MakeOperationFrame extends JFrame {
 	private User currentUser;
 	private double amount = 0;
 	private int numberAccountReceiver = -1;
+	private boolean internal = true;
 	
 	/**
 	 * Create the frame to edit a user
@@ -131,21 +137,36 @@ public class MakeOperationFrame extends JFrame {
 
 		amountInput = new JTextField();
 		amountInput.setColumns(10);
+		
+		ButtonGroup group = new ButtonGroup();
+		
+		JRadioButton rdbtnInterne = new JRadioButton("Interne \u00E0 la banque");
+		rdbtnInterne.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				internal = true;
+			}
+		});
+		
+		JRadioButton rdbtnExterne = new JRadioButton("Externe \u00E0 la banque");
+		rdbtnExterne.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				internal = false;
+			}
+		});
+
+		group.add(rdbtnInterne);
+		group.add(rdbtnExterne);
+		rdbtnInterne.setSelected(true);
 
 		JButton ValideButton = new JButton("Transf\u00E9rer");
 		ValideButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				amount = -Double.parseDouble(amountInput.getText());
-				System.out.println("Montant sans oppose: " + amount);
-				System.out.println("Montant avec oppose: " + amount);
-				
-				numberAccountReceiver = Integer.parseInt(receiverAccountInput.getText());
-				System.out.println("Numero cc: " + currentBankAccount.getAccountNumber());
-				boolean transfertResult = currentUser.operationManagement.makeOperation(currentUser, amount, currentBankAccount.getAccountNumber(), numberAccountReceiver,sqlInteraction);
+				boolean transfertResult = transfertMoney();
 				if(!transfertResult)
 					showMessageDialog(null, "Transfert impossible", "Warning", WARNING_MESSAGE);
 				else
 					showMessageDialog(null, "Transfert effectu\u00E9", "Information", INFORMATION_MESSAGE);
+				
 			}
 		});
 		
@@ -155,7 +176,11 @@ public class MakeOperationFrame extends JFrame {
 				dispose();
 			}
 		});
-
+		
+		JLabel lblSolde = new JLabel("Solde: " + currentBankAccount.getBalance() + " €");
+		lblSolde.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		
+		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -165,26 +190,33 @@ public class MakeOperationFrame extends JFrame {
 							.addGap(31)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+										.addGroup(gl_contentPane.createSequentialGroup()
+											.addComponent(customerAccountLabel, GroupLayout.PREFERRED_SIZE, 178, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+											.addComponent(customerAccountInput, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE))
+										.addGroup(gl_contentPane.createSequentialGroup()
+											.addComponent(receiverAccountLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+											.addGap(18)
+											.addComponent(receiverAccountInput, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE))
+										.addComponent(lblSolde, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE))
+									.addPreferredGap(ComponentPlacement.RELATED))
+								.addGroup(gl_contentPane.createSequentialGroup()
 									.addComponent(amountLabel, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addGroup(gl_contentPane.createSequentialGroup()
 											.addComponent(ValideButton)
 											.addPreferredGap(ComponentPlacement.UNRELATED)
 											.addComponent(CancelButton))
-										.addComponent(amountInput, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE)))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-										.addGroup(gl_contentPane.createSequentialGroup()
-											.addComponent(customerAccountLabel, GroupLayout.PREFERRED_SIZE, 178, GroupLayout.PREFERRED_SIZE)
-											.addGap(18)
-											.addComponent(customerAccountInput, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE))
-										.addGroup(gl_contentPane.createSequentialGroup()
-											.addComponent(receiverAccountLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-											.addGap(18)
-											.addComponent(receiverAccountInput, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE)))
-									.addPreferredGap(ComponentPlacement.RELATED)))
-							.addGap(196))
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+											.addGroup(gl_contentPane.createSequentialGroup()
+												.addComponent(rdbtnInterne)
+												.addGap(18)
+												.addComponent(rdbtnExterne, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED))
+											.addComponent(amountInput, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE)))))
+							.addGap(318))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(133)
 							.addComponent(frameLabel)))
@@ -195,23 +227,32 @@ public class MakeOperationFrame extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(frameLabel)
-					.addGap(22)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(customerAccountLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-						.addComponent(customerAccountInput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(22)
+							.addComponent(customerAccountInput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(customerAccountLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)))
+					.addGap(4)
+					.addComponent(lblSolde)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(receiverAccountLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
 						.addComponent(receiverAccountInput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(19)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(amountLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-						.addComponent(amountInput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(rdbtnInterne)
+						.addComponent(rdbtnExterne))
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(CancelButton)
-						.addComponent(ValideButton))
-					.addGap(44))
+						.addComponent(amountInput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(amountLabel, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(ValideButton)
+						.addComponent(CancelButton))
+					.addGap(16))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
@@ -312,5 +353,35 @@ public class MakeOperationFrame extends JFrame {
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
-
+	
+	private boolean transfertMoney() {
+		boolean transfertResult = false;
+		
+		if(!internal) {
+			amount = Double.parseDouble(amountInput.getText());
+			numberAccountReceiver = Integer.parseInt(receiverAccountInput.getText());
+			transfertResult = currentUser.operationManagement.makeExternalOperation(currentUser, amount, currentBankAccount.getAccountNumber(), numberAccountReceiver,sqlInteraction);
+			
+		} else {
+			
+			amount = Double.parseDouble(amountInput.getText());
+			numberAccountReceiver = Integer.parseInt(receiverAccountInput.getText());
+			try {
+				
+				String requete = "SELECT number FROM account where number=" + numberAccountReceiver;
+				ResultSet rs = sqlInteraction.executeQuery(requete);
+				rs.next();
+				if(rs.getInt(1) == numberAccountReceiver) {
+					transfertResult = currentUser.operationManagement.makeInternalOperation(currentUser, amount, currentBankAccount.getAccountNumber(), numberAccountReceiver,sqlInteraction);
+				} else {
+					transfertResult = false;
+				}
+				
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+				return false;
+			}
+		}
+		return transfertResult;
+	}
 }
