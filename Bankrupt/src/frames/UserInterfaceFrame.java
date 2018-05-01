@@ -140,6 +140,7 @@ public class UserInterfaceFrame extends JFrame {
 		btnVirerDeLargent.setBounds(145, 221, 342, 39);
 		btnVirerDeLargent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				InternalOperationFrame internalOperationFrame=new InternalOperationFrame(currentUser, sqlInteraction);
 			}
 		});
 		
