@@ -26,9 +26,6 @@ import javax.swing.JTable;
  */
 public class CustomerAccountsFrame extends javax.swing.JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	/**
 	 * Creates new form CustomerAccountsFrame
@@ -43,16 +40,14 @@ public class CustomerAccountsFrame extends javax.swing.JFrame {
 	private javax.swing.JLabel operationsLabel;
 	private javax.swing.JTable operationsTable;
 
-	private BankAccountManager bankAccountManager;
-	private CustomerOperation customerOperations;
 	Vector<BankAccount> vectAccounts;
+	private User currentUser;
 
 	public CustomerAccountsFrame(User user, SQLInteraction sqlInteraction) {
         initComponents();
         this.sqlInteraction=sqlInteraction;
-        bankAccountManager=new BankAccountManager(sqlInteraction);
-        customerOperations= new CustomerOperation();
-        this.vectAccounts = bankAccountManager.getUserAccounts(user);
+        this.currentUser=user;
+        this.vectAccounts = user.accountManagement.getUserAccounts(user, sqlInteraction);
         DefaultTableModel tableModel=parseAccountsToJTableModel(vectAccounts);
         accountsTable.setModel(tableModel);
     }
@@ -276,7 +271,7 @@ public class CustomerAccountsFrame extends javax.swing.JFrame {
     }
     
 	private void updateOperationsTable(int selectedAccount) {
-		Vector<Operation> vectOperations=customerOperations.getOperationsOfAccount(vectAccounts.get(selectedAccount).getAccountNumber(), sqlInteraction);
+		Vector<Operation> vectOperations=currentUser.operationManagement.getOperationsOfAccount(vectAccounts.get(selectedAccount).getAccountNumber(), sqlInteraction);
 		DefaultTableModel tableModel=parseOperationsToJTableModel(vectOperations);
 		operationsTable.setModel(tableModel);
 	}

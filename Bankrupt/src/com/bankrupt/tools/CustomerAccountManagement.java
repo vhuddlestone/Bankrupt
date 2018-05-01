@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import com.bankrupt.bankaccount.BankAccount;
+import com.bankrupt.bankaccount.CurrentAccount;
+import com.bankrupt.bankaccount.SavingAccount;
 import com.bankrupt.datatools.MD5Encryption;
 import com.bankrupt.datatools.SQLInteraction;
 import com.bankrupt.user.Banker;
@@ -15,14 +17,13 @@ public class CustomerAccountManagement implements AccountManagement {
 	static final int bankerRole =2;
 	static final int customerRole = 1;
 	static final int adminRole = 3;
-	SQLInteraction sqlInteraction=null;
 	
 	public CustomerAccountManagement(){
 		
 	}
 	
 	@Override
-	public Vector<User> getUser(int role){
+	public Vector<User> getUser(int role, SQLInteraction sqlInteraction){
 		Vector<User> vectUser=null;
 		String requete = null;
 		
@@ -45,11 +46,11 @@ public class CustomerAccountManagement implements AccountManagement {
 				int userId=rs.getInt("id");
 				switch(role) {
 				case customerRole:
-					int councillor_id=getCouncillorIdFromClientId(userId);
+					int councillor_id=getCouncillorIdFromClientId(userId, sqlInteraction);
 					//vectUser.add(new Customer(rs.getInt("id"), rs.getString("address"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("mail"), rs.getString("password"),customerRole, sqlInteraction,councillor_id));
 					break;
 				case bankerRole:
-					Vector<User> customers = getClientsFromBankerId(userId);
+					Vector<User> customers = getClientsFromBankerId(userId, sqlInteraction);
 					vectUser.add(new Banker(userId, rs.getString("address"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), bankerRole, customers));
 				break;
 				case adminRole:
@@ -176,19 +177,19 @@ public class CustomerAccountManagement implements AccountManagement {
 	}
 
 	@Override
-	public BankAccount deleteBankAccount(BankAccount bankAccountToDelete) {
+	public BankAccount deleteBankAccount(BankAccount bankAccountToDelete, SQLInteraction sqlInteraction) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public User deleteAccount(User usrToDelete) {
+	public User deleteAccount(User usrToDelete, SQLInteraction sqlInteraction) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Vector<User> getClientsFromBankerId(int id) {
+	public Vector<User> getClientsFromBankerId(int id, SQLInteraction sqlInteraction) {
 		String requete;
 		Vector<User> vectClients = null;
 		ResultSet rs= null;
@@ -209,7 +210,7 @@ public class CustomerAccountManagement implements AccountManagement {
 	}
 
 	@Override
-	public int getCouncillorIdFromClientId(int id) {
+	public int getCouncillorIdFromClientId(int id, SQLInteraction sqlInteraction) {
 		ResultSet rs=null;
 		int councillor_id= -1;
 		String requete = "SELECT councillor_id FROM customer WHERE user_id="+id;
@@ -231,7 +232,7 @@ public class CustomerAccountManagement implements AccountManagement {
 	 * @param id
 	 * @return errorMessage empy if user deleted, otherwise error message to display to user.
 	 */
-	public String deleteUser(int id) {
+	public String deleteUser(int id, SQLInteraction sqlInteraction) {
 		String errorMessage="";
 		ResultSet rs= null;
 		String requete;
@@ -308,5 +309,46 @@ public class CustomerAccountManagement implements AccountManagement {
 		String requete = "Update user SET firstname='"+firstName+"', lastname='"+lastName+"', mail='"+mail+"', address='"+address+"', password='"+password+"', role="+role+" WHERE id="+userId;
 		retour = sqlInteraction.executeUpdate(requete);
 		return retour;
+	}
+
+	@Override
+	public Vector<BankAccount> getUserAccounts(User user, SQLInteraction sqlInteraction){
+		Vector<BankAccount> vectAccounts = null;
+		
+		int userId=user.getId();
+		String requete = "SELECT account.number, saving.interest_rate, saving.type as savingType, account.balance, " + 
+				"account.type, current.authorized_overdraft, current.credit_card_number FROM account " + 
+				"LEFT JOIN current ON account.number=current.account_number " + 
+				"LEFT JOIN saving ON saving.account_number=account.number " + 
+				"WHERE account.customer_id="+userId;
+		
+		ResultSet rs=sqlInteraction.executeQuery(requete);
+		
+		if(rs != null) {
+			try {
+				vectAccounts=new Vector<BankAccount>();
+				while(rs.next()) {
+					int type=rs.getInt("type");
+					int number= rs.getInt("number");
+					double balance=rs.getDouble("balance");
+					switch(type) {
+					case Values.currentAccountType:
+						double creditCardNumber= rs.getDouble("credit_card_number");
+						int authorizedOverdraft= rs.getInt("authorized_overdraft");
+						vectAccounts.add(new CurrentAccount(balance, number, userId, type, creditCardNumber, authorizedOverdraft));
+						break;
+					case Values.savingAccountType:
+						String savingType= rs.getString("savingType");
+						float interestRate=rs.getFloat("interest_rate");
+						vectAccounts.add(new SavingAccount(balance, number, userId, type, savingType, interestRate));
+						break;
+					}
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return vectAccounts;
 	}
 }

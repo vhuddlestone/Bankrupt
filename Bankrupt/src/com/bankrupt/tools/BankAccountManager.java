@@ -11,13 +11,12 @@ import com.bankrupt.datatools.SQLInteraction;
 import com.bankrupt.user.User;
 
 public class BankAccountManager implements AccountManagement {
-	private  SQLInteraction sqlInteraction;
 	
-	public BankAccountManager(SQLInteraction sqlInteraction){
-		this.sqlInteraction=sqlInteraction;
+	public BankAccountManager(){
 	}
 	
-	public Vector<BankAccount> getUserAccounts(User user){
+	@Override
+	public Vector<BankAccount> getUserAccounts(User user, SQLInteraction sqlInteraction){
 		Vector<BankAccount> vectAccounts = null;
 		
 		int userId=user.getId();
@@ -65,7 +64,7 @@ public class BankAccountManager implements AccountManagement {
 	}
 
 	@Override
-	public User deleteAccount(User usrToDelete) {
+	public User deleteAccount(User usrToDelete, SQLInteraction sqlInteraction) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -78,25 +77,25 @@ public class BankAccountManager implements AccountManagement {
 	}
 
 	@Override
-	public BankAccount deleteBankAccount(BankAccount bankAccountToDelete) {
+	public BankAccount deleteBankAccount(BankAccount bankAccountToDelete, SQLInteraction sqlInteraction) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Vector<User> getUser(int role) {
+	public Vector<User> getUser(int role, SQLInteraction sqlInteraction) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Vector<User> getClientsFromBankerId(int id) {
+	public Vector<User> getClientsFromBankerId(int id, SQLInteraction sqlInteraction) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public int getCouncillorIdFromClientId(int id) {
+	public int getCouncillorIdFromClientId(int id, SQLInteraction sqlInteraction) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
