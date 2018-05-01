@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.bankrupt.bankaccount.BankAccount;
 import com.bankrupt.datatools.SQLInteraction;
 import com.bankrupt.user.Banker;
 import com.bankrupt.user.Customer;
@@ -18,14 +19,15 @@ import com.bankrupt.user.User;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
-
-
 
 public class UserInterfaceFrame extends JFrame {
 
@@ -36,7 +38,7 @@ public class UserInterfaceFrame extends JFrame {
 	static final int customerRole = 1;
 	static final int bankerRole = 2;
 	static final int adminRole = 3;
-	
+
 	private String firstName = "";
 	private String lastName = "";
 	private String address = "";
@@ -46,8 +48,9 @@ public class UserInterfaceFrame extends JFrame {
 	private String fullName;
 	private User currentUser;
 
-	//int id, String address, String firstName,String lastName, String mail, String password, int role, SQLInteraction sqlInteraction, int councillor
-	
+	// int id, String address, String firstName,String lastName, String mail, String
+	// password, int role, SQLInteraction sqlInteraction, int councillor
+
 	public UserInterfaceFrame(User userConnected, SQLInteraction sqlInteraction) {
 		setResizable(false);
 		if (userConnected != null) {
@@ -56,14 +59,14 @@ public class UserInterfaceFrame extends JFrame {
 			this.address = userConnected.getAddress();
 			this.mail = userConnected.getMail();
 			this.password = userConnected.getPassword();
-			this.sqlInteraction=sqlInteraction;
+			this.sqlInteraction = sqlInteraction;
 			this.currentUser = userConnected;
 			fullName = firstName + " " + lastName;
 		}
-		
+
 		initComponentsUser();
-		
-		switch(userConnected.getRole()) {
+
+		switch (userConnected.getRole()) {
 		case customerRole:
 			initComponentsUser();
 			break;
@@ -71,7 +74,39 @@ public class UserInterfaceFrame extends JFrame {
 			initComponentsBanker();
 			break;
 		}
+
+	}
+
+	void deleteAccount() {
 		
+		BankAccount currentBankAccount = currentUser.operationManagement.findBankAccount(currentUser.getId(),1,0,sqlInteraction);
+		BankAccount savingBankAccount1 = currentUser.operationManagement.findBankAccount(currentUser.getId(),2,1,sqlInteraction);
+		BankAccount savingBankAccount2 = currentUser.operationManagement.findBankAccount(currentUser.getId(),2,2,sqlInteraction);
+		BankAccount savingBankAccount3 = currentUser.operationManagement.findBankAccount(currentUser.getId(),2,3,sqlInteraction);
+		
+		Vector<BankAccount> bankAccountList = new Vector<BankAccount>();
+		bankAccountList.add(savingBankAccount1);
+		bankAccountList.add(savingBankAccount2);
+		bankAccountList.add(savingBankAccount3);
+		
+		if(currentBankAccount != null) {
+			String requete = "DELETE from current where account_number=" + currentBankAccount.getAccountNumber();
+			int id = sqlInteraction.executeUpdate(requete);
+			requete = "DELETE from account where number=" + currentBankAccount.getAccountNumber();
+			id = sqlInteraction.executeUpdate(requete);	
+		}
+		
+		for(BankAccount b : bankAccountList) {
+			if(b != null) {
+				String requete = "DELETE from saving where account_number=" + b.getAccountNumber();
+				int id = sqlInteraction.executeUpdate(requete);
+				requete = "DELETE from account where number=" + b.getAccountNumber();
+				id = sqlInteraction.executeUpdate(requete);	
+			}
+		}
+		
+		String requete = "DELETE from user where id=" + currentUser.getId();
+		int id = sqlInteraction.executeUpdate(requete);
 	}
 	
 	private void initComponentsUser() {
@@ -129,7 +164,15 @@ public class UserInterfaceFrame extends JFrame {
 		JButton btnSupprimerLeCompte = new JButton("Supprimer le compte client");
 		btnSupprimerLeCompte.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			}
+				int delete = JOptionPane.showConfirmDialog(null, "Voulez-vous vraiment supprimer votre compte ?","Warning",JOptionPane.YES_NO_OPTION);
+				if(delete == JOptionPane.YES_OPTION) {
+					deleteAccount();
+					dispose();
+					showMessageDialog(null, "Bye bye !", "Warning", WARNING_MESSAGE);
+					LoginFrame frame = new LoginFrame(sqlInteraction);
+					frame.setVisible(true);
+				}
+			}	
 		});
 		
 		JButton editCurrentAccount = new JButton("Modifier votre compte client");
@@ -246,10 +289,7 @@ public class UserInterfaceFrame extends JFrame {
 		});
 		
 		JButton btnSupprimerLeCompte = new JButton("Supprimer le compte d'un client");
-		btnSupprimerLeCompte.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		
 		
 		JButton showCustomerListButton = new JButton("Consulter la liste de vos clients");
 		showCustomerListButton.addActionListener(new ActionListener() {
