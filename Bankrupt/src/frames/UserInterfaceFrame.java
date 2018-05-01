@@ -1,5 +1,8 @@
 package frames;
 
+import static javax.swing.JOptionPane.WARNING_MESSAGE;
+import static javax.swing.JOptionPane.showMessageDialog;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -97,10 +100,21 @@ public class UserInterfaceFrame extends JFrame {
 		});
 		
 		JButton checkBankAccountButton = new JButton("Consulter un compte banquaire");
+		checkBankAccountButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CustomerAccountsFrame frame = new CustomerAccountsFrame(currentUser,sqlInteraction);
+				frame.setVisible(true);
+			}
+		});
 		
 		JButton externalTransfertButton = new JButton("Effectuer un transfert vers un compte client");
 		externalTransfertButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(currentUser.operationManagement.findBankAccount(currentUser.getId(), 1, 0, sqlInteraction) == null)
+				{
+					showMessageDialog(null, "Vous ne poss\u00E9dez pas de compte courant", "Warning", WARNING_MESSAGE);
+					return;
+				}
 				MakeOperationFrame frame = new MakeOperationFrame(currentUser,sqlInteraction);
 				frame.setVisible(true);
 			}

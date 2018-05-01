@@ -305,7 +305,6 @@ public class CustomerAccountManagement implements AccountManagement {
 	
 	public int editUser(int userId, String firstName, String lastName, String mail, String address, String password, int role, SQLInteraction sqlInteraction) {
 		int retour;
-		password= MD5Encryption.encrypteString(password);
 		String requete = "Update user SET firstname='"+firstName+"', lastname='"+lastName+"', mail='"+mail+"', address='"+address+"', password='"+password+"', role="+role+" WHERE id="+userId;
 		retour = sqlInteraction.executeUpdate(requete);
 		return retour;

@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.bankrupt.datatools.MD5Encryption;
 import com.bankrupt.datatools.SQLInteraction;
 import com.bankrupt.tools.CustomerAccountManagement;
 import com.bankrupt.user.User;
@@ -224,7 +225,13 @@ public class UserDetailsFrame extends JFrame {
 			customerAccountManagement.addUser(firstNameInput.getText(), lastNameInput.getText(), mailInput.getText(), addressInput.getText(), passwordInput.getText(), 1, this.bankerId,sqlInteraction);
 			break;
 		case userDetailEditType:
-			int retour = customerAccountManagement.editUser(this.id,firstNameInput.getText(), lastNameInput.getText(), mailInput.getText(), addressInput.getText(), passwordInput.getText(), 1,sqlInteraction);
+			String pwdEdited = this.password;
+			
+			if(!passwordInput.getText().equals(pwdEdited))
+				pwdEdited = MD5Encryption.encrypteString(passwordInput.getText());
+			
+			int retour = customerAccountManagement.editUser(this.id,firstNameInput.getText(), lastNameInput.getText(), mailInput.getText(), addressInput.getText(), pwdEdited, 1,sqlInteraction);
+				
 			if (retour == -1) {
 				showMessageDialog(null, "Edit Failed", "Warning", WARNING_MESSAGE);
 			}
