@@ -5,17 +5,24 @@ import com.bankrupt.datatools.SQLInteraction;
 public class CurrentAccount extends BankAccount {
 	
 	private int accountNumer;
-	private double creditCardNumer;
+	private double creditCardNumber;
 	private int authorizedOverdraft;
 	
 	public CurrentAccount(double balance, int accountNumber, int customerID, int accountType, double creditCardNumber, int authorizedOverdraft)
 	{
 		super(balance,accountNumber,customerID,accountType);
 		this.accountNumber=accountNumber;
-		this.creditCardNumer=creditCardNumber;
+		this.creditCardNumber=creditCardNumber;
 		this.authorizedOverdraft=authorizedOverdraft;
 	}
 
+	public String toString() {
+		return "Account Number: " + accountNumber + " balance: " + balance 
+				+ " CustomerID: " + customerID + " accountType: " + accountType 
+				+ " creditCardNumber: " + creditCardNumber + " authorizedOverdraft: " 
+				+ authorizedOverdraft;
+		}
+	
 	/**
 	 * @return the accountNumer
 	 */
@@ -34,14 +41,14 @@ public class CurrentAccount extends BankAccount {
 	 * @return the creditCardNumer
 	 */
 	public double getCreditCardNumer() {
-		return creditCardNumer;
+		return creditCardNumber;
 	}
 
 	/**
 	 * @param creditCardNumer the creditCardNumer to set
 	 */
 	public void setCreditCardNumer(double creditCardNumer) {
-		this.creditCardNumer = creditCardNumer;
+		this.creditCardNumber = creditCardNumer;
 	}
 
 	/**

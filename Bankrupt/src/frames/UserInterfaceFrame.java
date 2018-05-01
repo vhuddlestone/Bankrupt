@@ -101,6 +101,8 @@ public class UserInterfaceFrame extends JFrame {
 		JButton externalTransfertButton = new JButton("Effectuer un transfert vers un compte client");
 		externalTransfertButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				MakeOperationFrame frame = new MakeOperationFrame(currentUser,sqlInteraction);
+				frame.setVisible(true);
 			}
 		});
 		
@@ -243,7 +245,7 @@ public class UserInterfaceFrame extends JFrame {
 			}
 		});
 		
-		JButton createCustomerButton = new JButton("Cr�er un compte client");
+		JButton createCustomerButton = new JButton("Crï¿½er un compte client");
 		createCustomerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				UserDetailsFrame frame = new UserDetailsFrame(sqlInteraction);

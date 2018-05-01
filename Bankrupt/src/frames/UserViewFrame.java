@@ -214,7 +214,7 @@ public class UserViewFrame extends javax.swing.JFrame {
 			}
 			updateTable();
 		}else {
-			showMessageDialog(null, "S�lectionner un utilisateur dans le tableau avant d'essayer de le supprimer", "Erreur de suppression", WARNING_MESSAGE);
+			showMessageDialog(null, "Sï¿½lectionner un utilisateur dans le tableau avant d'essayer de le supprimer", "Erreur de suppression", WARNING_MESSAGE);
 		}
 	}
 
@@ -243,7 +243,7 @@ public class UserViewFrame extends javax.swing.JFrame {
 			});
 			editUserFrame.setVisible(true);
 		}else {
-			showMessageDialog(null, "S�lectionnez un utilisateur du tableau � �diter", "Impossible d'�diter", WARNING_MESSAGE);
+			showMessageDialog(null, "Sï¿½lectionnez un utilisateur du tableau ï¿½ ï¿½diter", "Impossible d'ï¿½diter", WARNING_MESSAGE);
 		}
 	}
 
@@ -293,7 +293,7 @@ public class UserViewFrame extends javax.swing.JFrame {
 		       return false;
 		    }
 		};
-		String header[] = { "id", "Nom", "Prenom", "Mot de passe", "Mail", "Addresse", "R�le" };
+		String header[] = { "id", "Nom", "Prenom", "Mot de passe", "Mail", "Addresse", "Rï¿½le" };
 
 		modelTable.setColumnIdentifiers(header);
 

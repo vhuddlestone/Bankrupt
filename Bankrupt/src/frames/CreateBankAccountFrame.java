@@ -125,13 +125,13 @@ public class CreateBankAccountFrame extends JFrame {
 					System.out.println("account_type: " + account_type + "saving type: " + saving_type);
 					result = currentUser.accountManagement.addBankAccount(currentUser, account_type, saving_type, sqlInteraction);
 					if(!result)
-						showMessageDialog(null, "Vous possédez déjà un compte", "Warning", WARNING_MESSAGE);
+						showMessageDialog(null, "Vous poss\u00E9dez d\u00E9j\u00e0 un compte", "Warning", WARNING_MESSAGE);
 					else
-						showMessageDialog(null, "Compte créé", "Information", INFORMATION_MESSAGE);
+						showMessageDialog(null, "Compte cr\u00E9\u00E9", "Information", INFORMATION_MESSAGE);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					showMessageDialog(null, "Un problème est survenu lors de la connexion à la BDD. Compte non créé", "Warning", WARNING_MESSAGE);
+					showMessageDialog(null, "Un probl\u00E8me est survenu lors de la connexion à  la BDD. Compte non cr\u00E9\u00E9", "Warning", WARNING_MESSAGE);
 				}
 			}
 		});
@@ -174,6 +174,10 @@ public class CreateBankAccountFrame extends JFrame {
 				saving_type = 3;
 			}
 		});
+		
+		JLabel accountNumberLabel = new JLabel();
+		accountNumberLabel.setText("Numéro de compte");
+		accountNumberLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -183,21 +187,24 @@ public class CreateBankAccountFrame extends JFrame {
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addContainerGap()
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(rdbtnCompteCourant)
-										.addComponent(rdbtnLivretA))
-									.addGap(26)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(rdbtnAssuranceVie, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)
-										.addComponent(rdbtnComptepargnePel)))
-								.addComponent(lblSlectionnerUnType)))
+								.addComponent(rdbtnCompteCourant)
+								.addComponent(rdbtnLivretA))
+							.addGap(26)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(rdbtnAssuranceVie, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)
+								.addComponent(rdbtnComptepargnePel)))
 						.addComponent(frameLabel)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(ValideButton)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(CancelButton)))
+							.addComponent(CancelButton))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblSlectionnerUnType))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(accountNumberLabel)))
 					.addContainerGap(13, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
@@ -205,9 +212,11 @@ public class CreateBankAccountFrame extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(frameLabel)
-					.addGap(45)
+					.addGap(18)
+					.addComponent(accountNumberLabel, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+					.addGap(28)
 					.addComponent(lblSlectionnerUnType)
-					.addGap(36)
+					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(rdbtnCompteCourant)
 						.addComponent(rdbtnComptepargnePel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))

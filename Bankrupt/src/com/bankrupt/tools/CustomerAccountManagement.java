@@ -64,13 +64,6 @@ public class CustomerAccountManagement implements AccountManagement {
 		return vectUser;
 	}
 
-	@Override
-	public User createAccount(String address, String firstName, String lastName, String mail, String password,
-			int role) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	
 	private int genBankAccountID(SQLInteraction sqlInteraction)
 	{
@@ -137,7 +130,6 @@ public class CustomerAccountManagement implements AccountManagement {
 			return true;
 	}
 	
-	
 	public boolean addBankAccount(User customer, int account_type, int saving_type, SQLInteraction sqlInteraction) throws SQLException {
 		
 		int accountNumber = genBankAccountID(sqlInteraction);
@@ -155,6 +147,8 @@ public class CustomerAccountManagement implements AccountManagement {
 		
 		requete = "INSERT INTO account(number, balance, customer_id, type) VALUES ("+accountNumber+","+0+","+customerId+","+account_type+")";
 		int rs = sqlInteraction.executeUpdate(requete);
+		if(rs == 0)
+			return false;
 		
 		if(account_type == 1)
 		{
@@ -306,7 +300,7 @@ public class CustomerAccountManagement implements AccountManagement {
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
 		}
-		// TODO voir pour vérifier comment s'est passé un insert dans la base données. voir si le rs contient la linge
+		// TODO voir pour vÃ©rifier comment s'est passÃ© un insert dans la base donnÃ©es. voir si le rs contient la linge
 	}
 	
 	public int editUser(int userId, String firstName, String lastName, String mail, String address, String password, int role, SQLInteraction sqlInteraction) {
@@ -316,7 +310,4 @@ public class CustomerAccountManagement implements AccountManagement {
 		retour = sqlInteraction.executeUpdate(requete);
 		return retour;
 	}
-
-
-
 }

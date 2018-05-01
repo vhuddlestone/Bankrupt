@@ -159,7 +159,7 @@ public class UserDetailsFrame extends JFrame {
 				frame.setVisible(true);
 			}
 		});
-		/* Gestion affichage des �l�ments */
+		/* Gestion affichage des ï¿½lï¿½ments */
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)

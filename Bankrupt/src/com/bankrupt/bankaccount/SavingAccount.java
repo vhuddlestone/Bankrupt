@@ -13,6 +13,13 @@ public class SavingAccount extends BankAccount {
 		this.accountNumber=accountNumber;
 		this.type=savingType;
 	}
+	
+	public String toString() {
+		return "Account Number: " + accountNumber + " balance: " + balance 
+				+ " CustomerID: " + customerID + " accountType: " + accountType 
+				+ " savingType: " + type + " interestRate: " 
+				+ interestRate;
+		}
 
 	/**
 	 * @return the interestRate

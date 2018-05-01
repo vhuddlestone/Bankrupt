@@ -10,7 +10,7 @@ import com.bankrupt.bankaccount.SavingAccount;
 import com.bankrupt.datatools.SQLInteraction;
 import com.bankrupt.user.User;
 
-public class BankAccountManager {
+public class BankAccountManager implements AccountManagement {
 	private  SQLInteraction sqlInteraction;
 	
 	public BankAccountManager(SQLInteraction sqlInteraction){
@@ -56,5 +56,48 @@ public class BankAccountManager {
 		}
 		return vectAccounts;
 	}
-	
+
+	@Override
+	public void addUser(String firstName, String lastName, String mail, String address, String password, int role,
+			int councillorId, SQLInteraction sqlInteraction) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public User deleteAccount(User usrToDelete) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean addBankAccount(User customer, int account_type, int saving_type, SQLInteraction sqlInteraction)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public BankAccount deleteBankAccount(BankAccount bankAccountToDelete) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Vector<User> getUser(int role) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Vector<User> getClientsFromBankerId(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getCouncillorIdFromClientId(int id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

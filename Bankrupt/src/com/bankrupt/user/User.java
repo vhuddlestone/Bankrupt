@@ -41,8 +41,7 @@ public abstract class User {
 		this.password = password;
 		this.role = role;
 		this.accountManagement = new CustomerAccountManagement();
-		//this.operationManagement = new CustomerOperation();
-		
+		this.operationManagement = new CustomerOperation();	
 	}
 	
 	public abstract Vector<User> getCustomersInCharge();
