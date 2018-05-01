@@ -68,7 +68,7 @@ public class ChatBox {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 543, 386);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
 		chatPanel = new JTextPane();

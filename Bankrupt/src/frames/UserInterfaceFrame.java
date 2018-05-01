@@ -265,7 +265,7 @@ public class UserInterfaceFrame extends JFrame {
 			}
 		});
 		
-		JButton createCustomerButton = new JButton("Crï¿½er un compte client");
+		JButton createCustomerButton = new JButton("Cr�er un compte client");
 		createCustomerButton.setBounds(145, 300, 342, 39);
 		createCustomerButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		createCustomerButton.addActionListener(new ActionListener() {
@@ -277,6 +277,7 @@ public class UserInterfaceFrame extends JFrame {
 		
 		JButton disconnectButton = new JButton("D\u00E9connexion");
 		disconnectButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		disconnectButton.setBounds(463, 375,150,39);
 		disconnectButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
