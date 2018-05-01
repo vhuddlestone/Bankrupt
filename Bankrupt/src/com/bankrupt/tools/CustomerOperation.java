@@ -72,33 +72,76 @@ public class CustomerOperation implements OperationManagement {
 	}
 	
 		
-	public boolean makeOperation(User currentUser, double amount, int numberAccountSender, int numberAccountReceiver,SQLInteraction sqlInteraction) {
-	try{
-		BankAccount bankAccount = findBankAccount(currentUser.getId(),1,0,sqlInteraction);	
-		System.out.println("Ancienne balance: " + bankAccount.balance);
-		bankAccount.balance += amount;
-		System.out.println("Nouvelle balance: " + bankAccount.balance);
-		
-		
-		String requete = "INSERT INTO operation (sender, receiver, amount, date) VALUES ("+numberAccountSender+","
-				+numberAccountReceiver+","+Math.abs(amount)+",'"+dateFormat.format(date)+"')";
-		
-		int rs=sqlInteraction.executeUpdate(requete);
-		if(rs == 0)
+	public boolean makeExternalOperation(User currentUser, double amount, int numberAccountSender, int numberAccountReceiver,SQLInteraction sqlInteraction) {
+		try{
+			if(amount<0)
+				return false;
+			
+			BankAccount bankAccount = findBankAccount(currentUser.getId(),1,0,sqlInteraction);	
+			bankAccount.balance -= amount;
+			
+			if(bankAccount.balance<0)
+				return false;
+			
+			
+			String requete = "INSERT INTO operation (sender, receiver, amount, date) VALUES ("+numberAccountSender+","
+					+numberAccountReceiver+","+Math.abs(amount)+",'"+dateFormat.format(date)+"')";
+			
+			int rs=sqlInteraction.executeUpdate(requete);
+			if(rs == 0)
+				return false;
+			
+			requete = "UPDATE account SET balance=" + bankAccount.getBalance() + " WHERE number=" + numberAccountSender;
+			rs=sqlInteraction.executeUpdate(requete);
+			if(rs == 0)
+				return false;
+			else
+				return true;
+			}
+		catch(Exception e) {
+			System.out.println(e.toString());
 			return false;
+		}
+	}	
+	
+	public boolean makeInternalOperation(User currentUser, double amount, int numberAccountSender, int numberAccountReceiver, SQLInteraction sqlInteraction) {
+		try{
+			if(amount<0)
+				return false;
 		
-		requete = "UPDATE account SET balance=" + bankAccount.getBalance() + " WHERE number=" + numberAccountSender;
-		rs=sqlInteraction.executeUpdate(requete);
-		if(rs == 0)
+			BankAccount bankAccountSender = findBankAccount(currentUser.getId(),1,0,sqlInteraction);	
+			bankAccountSender.balance += -amount;
+			
+			if(bankAccountSender.balance<0)
+				return false;
+			
+			BankAccount bankAccountReceiver = findBankAccount(currentUser.getId(),1,0,sqlInteraction);	
+			bankAccountReceiver.balance += amount;
+			
+			String requete = "INSERT INTO operation (sender, receiver, amount, date) VALUES ("+numberAccountSender+","
+					+numberAccountReceiver+","+Math.abs(amount)+",'"+dateFormat.format(date)+"')";
+			
+			int rs=sqlInteraction.executeUpdate(requete);
+			if(rs == 0)
+				return false;
+			
+			requete = "UPDATE account SET balance=" + bankAccountSender.getBalance() + " WHERE number=" + numberAccountSender;
+			rs=sqlInteraction.executeUpdate(requete);
+			if(rs == 0)
+				return false;
+			
+			requete = "UPDATE account SET balance=" + bankAccountReceiver.getBalance() + " WHERE number=" + numberAccountReceiver;
+			rs=sqlInteraction.executeUpdate(requete);
+			if(rs == 0)
+				return false;
+			else
+				return true;
+			}
+		catch(Exception e) {
+			System.out.println(e.toString());
 			return false;
-		else
-			return true;
+		}
 	}
-	catch(Exception e) {
-		System.out.println(e.toString());
-		return false;
-	}
-}	
 	
 	public Vector<BankAccount> getBankAccount(SQLInteraction sqlInteraction, int type){
 		Vector<BankAccount> vectBankAccount=null;
