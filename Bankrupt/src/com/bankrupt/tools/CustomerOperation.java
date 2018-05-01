@@ -39,9 +39,7 @@ public class CustomerOperation implements OperationManagement {
 			for(BankAccount b : bankAccountList)
 			{
 				if(b.getCustomerID() == customerID)
-				{
 					bankAccountFound = b;
-				}
 			}
 		} else {
 			switch(savingType) {
@@ -49,27 +47,21 @@ public class CustomerOperation implements OperationManagement {
 				for(BankAccount b : bankAccountList)
 				{
 					if(b.getCustomerID() == customerID && b.getSavingType().equals("PEL"))
-					{
 						bankAccountFound = b;
-					}
 				}
 				break;
 			case 2:
 				for(BankAccount b : bankAccountList)
 				{
 					if(b.getCustomerID() == customerID && b.getSavingType().equals("LA"))
-					{
 						bankAccountFound = b;
-					}
 				}
 				break;
 			case 3:
 				for(BankAccount b : bankAccountList)
 				{
 					if(b.getCustomerID() == customerID && b.getSavingType().equals("AV"))
-					{
 						bankAccountFound = b;
-					}
 				}
 				break;
 			}
@@ -89,7 +81,7 @@ public class CustomerOperation implements OperationManagement {
 		
 		
 		String requete = "INSERT INTO operation (sender, receiver, amount, date) VALUES ("+numberAccountSender+","
-				+numberAccountReceiver+","+amount+","+dateFormat.format(date)+")";
+				+numberAccountReceiver+","+Math.abs(amount)+",'"+dateFormat.format(date)+"')";
 		
 		int rs=sqlInteraction.executeUpdate(requete);
 		if(rs == 0)
