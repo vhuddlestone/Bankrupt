@@ -1,6 +1,8 @@
 package frames;
 
 import java.awt.List;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -16,6 +18,7 @@ import com.bankrupt.datatools.SQLInteraction;
 import com.bankrupt.tools.CustomerOperation;
 import com.bankrupt.tools.Values;
 import com.bankrupt.user.User;
+import javax.swing.JTable;
 
 /**
  *
@@ -31,15 +34,16 @@ public class CustomerAccountsFrame extends javax.swing.JFrame {
 	
 	private BankAccountManager bankAccountManager;
 	private CustomerOperation customerOperations;
+	Vector<BankAccount> vectAccounts;
 	
     public CustomerAccountsFrame(User user, SQLInteraction sqlInteraction) {
         initComponents();
         this.sqlInteraction=sqlInteraction;
         bankAccountManager=new BankAccountManager(sqlInteraction);
-        customerOperations= new CustomerOperation(sqlInteraction);
-        Vector<BankAccount> vectAccounts = bankAccountManager.getUserAccounts(user);
-        DefaultListModel listModel=parseAccountsToJListModel(vectAccounts);
-        accountList.setModel(listModel);
+        customerOperations= new CustomerOperation();
+        this.vectAccounts = bankAccountManager.getUserAccounts(user);
+        DefaultTableModel tableModel=parseAccountsToJTableModel(vectAccounts);
+        accountsTable.setModel(tableModel);
     }
 
     /**
@@ -51,44 +55,54 @@ public class CustomerAccountsFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        accountList = new javax.swing.JList<>();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        OperationsList = new javax.swing.JList<>();
+        accountsTable = new javax.swing.JTable();
+        accountsTable = new JTable();
+        operationsTable = new javax.swing.JTable();
+        operationsTable = new JTable();
         comptesLabel = new javax.swing.JLabel();
         operationsLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        accountList.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-        accountList.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        accountList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        accountList.addListSelectionListener(new ListSelectionListener() {
+        accountsTable.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        accountsTable.setFont(new java.awt.Font("Tahoma", 0, 18));
+        accountsTable.addMouseListener(new MouseListener(){
+		    @Override
+		    public void mouseClicked(MouseEvent e){
+		        int selectedAccount = accountsTable.getSelectedRow();
+		        if(selectedAccount !=-1) {
+			        updateOperationsTable(selectedAccount);
+		        }
+		    }
 
 			@Override
-			public void valueChanged(ListSelectionEvent arg0) {
-				if(selectedAccountIndex != accountList.getSelectedIndex()) {
-					selectedAccountIndex=accountList.getSelectedIndex();
-					updateOperationsList(selectedAccountIndex);
-				}else {
-					
-				}					
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
 			}
-        });
-        jScrollPane1.setViewportView(accountList);
 
-        OperationsList.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
-        OperationsList.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        OperationsList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(OperationsList);
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
+
+        operationsTable.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        operationsTable.setFont(new java.awt.Font("Tahoma", 0, 18));
 
         comptesLabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         comptesLabel.setText("Vos comptes :");
@@ -103,12 +117,12 @@ public class CustomerAccountsFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(accountsTable, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(comptesLabel))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(operationsLabel)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 719, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(operationsTable, javax.swing.GroupLayout.PREFERRED_SIZE, 719, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -117,93 +131,78 @@ public class CustomerAccountsFrame extends javax.swing.JFrame {
                 .addGap(157, 157, 157)
                 .addComponent(comptesLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(accountsTable, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(operationsLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 571, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(operationsTable, javax.swing.GroupLayout.PREFERRED_SIZE, 571, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21))
         );
 
         pack();
-    }// </editor-fold>                        
-   
-    /*private DefaultListModel parseOperationsToJListModel(Vector<Object> vectObjet) {
-    	DefaultListModel modelList = new DefaultListModel();
+    }// </editor-fold>      
+    
+    private DefaultTableModel parseOperationsToJTableModel(Vector<Operation> vectOperation) {
+    	DefaultTableModel modelTable= new DefaultTableModel();
     	
     	//TODO TOFINISH
     	int index=0;
-		for (Object objet : vectObjet) {
+    	
+		String header[] = { "Compte", "Montant", "Date"};
+		modelTable.setColumnIdentifiers(header);
+		
+		for (Operation operation : vectOperation) {
 			Object[] model = new Object[8];
-			ArrayList<String> list = new ArrayList<String>();
-			list.add(String.valueOf(account.getAmount()));
+			model[0]=String.valueOf(operation.getAmount());
 
-			if(selectedAccountIndex==account.getReceiver()) {
-				model[0]=account.getSender();
-				model
+			if(selectedAccountIndex==operation.getReceiver()) {
+				model[1]=String.valueOf(operation.getSender());
 			}else {
-				model[0]=account.getReceiver();
+				model[2]=String.valueOf(operation.getReceiver());
 			}
-			list.add(String.valueOf(account.()));
-			list.add(String.valueOf(account.getAccountType()));
-			list.add(String.valueOf(account.getAccountNumber()));
-			/*model[0] = account.getAccountNumber();
-			model[1] = account.getAccountType();
-			model[2] = account.getBalance();
+			model[3]=String.valueOf(operation.getDate());
 
-			modelList.insertElementAt(model, index);
-			modelList.set
+			modelTable.addRow(model);
 			index++;
 		}
-		return modelList;
+		return modelTable;
     }
-    */
     
+	private void updateOperationsTable(int selectedAccount) {
+		Vector<Operation> vectOperations=customerOperations.getOperationsOfAccount(vectAccounts.get(selectedAccount).getAccountNumber(), sqlInteraction);
+		DefaultTableModel tableModel=parseOperationsToJTableModel(vectOperations);
+		operationsTable.setModel(tableModel);
+	}
     
-    
-    private DefaultListModel parseAccountsToJListModel(Vector<BankAccount> vectAccounts) {
-    	DefaultListModel modelList = new DefaultListModel();
+    private DefaultTableModel parseAccountsToJTableModel(Vector<BankAccount> vectAccounts) {
+    	DefaultTableModel modelList = new DefaultTableModel();
     	
-		String header[] = { "id", "Nom", "Prenom", "Mot de passe", "Mail", "Addresse", "Rôle" };
+		String header[] = { "Type", "Numero", "Solde" };
+		
+		modelList.setColumnIdentifiers(header);
 		int index=0;
 		for (BankAccount account : vectAccounts) {
 			Object[] model = new Object[8];
-			ArrayList<String> list = new ArrayList<String>();
 			if(account.getAccountType()==Values.currentAccountType) {
-				list.add(Values.currentAccount);
+				model[0]=(Values.currentAccount);
 			}else {
-				list.add(String.valueOf(account.getAccountType()));
+				model[0]=(String.valueOf(account.getAccountType()));
 			}
-			list.add(String.valueOf(account.getAccountNumber()));
-			list.add(String.valueOf(account.getAccountType()));
-			list.add(String.valueOf(account.getAccountNumber()));
-			/*model[0] = account.getAccountNumber();
-			model[1] = account.getAccountType();
-			model[2] = account.getBalance();*/
+			model[1]=(String.valueOf(account.getAccountNumber()));
+			model[2]= account.getBalance();
 
-			modelList.insertElementAt(list, index);
+			modelList.addRow(model);
 			index++;
 		}
 		return modelList;
 	}
     
-	private void updateOperationsList(int selectedAccountIndex) {
-		Vector<Operation> operationsVect= new Vector<Operation>();
-		operationsVect=customerOperations.getOperationsOfAccount( selectedAccountIndex);
-		
-		for(Operation operation: operationsVect) {
-			
-		}
-	}
-
     // Variables declaration - do not modify                     
-    private javax.swing.JList<String> OperationsList;
-    private javax.swing.JList<String> accountList;
+    private JTable operationsTable;
+    private JTable accountsTable;
     private javax.swing.JLabel comptesLabel;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel operationsLabel;
     // End of variables declaration                   
 }
