@@ -6,4 +6,5 @@ public final class Values {
 	public static final int savingAccountType=1;
 	public static final int currentAccountType=2;
 	public static final String currentAccount="Courant";
+	public static final String defautlSeparator="@";
 }
