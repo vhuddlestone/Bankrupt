@@ -45,16 +45,17 @@ public class ChatBox {
 	public ChatBox(User user) {
 		initialize();
 		this.currentUser = user;
-		clientSocket = new ClientSocket(currentUser, "127.0.0.1", 54821);
 
 		Timer timerUpdateChatPanel = new Timer();
 		timerUpdateChatPanel.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				System.out.println("Je verifie si un autre chatteur parle");
-				String text = clientSocket.getUpdate();
-				if (chatPanel.getText() != text) {
-					chatPanel.setText(text);
+				if (clientSocket != null) {
+					System.out.println("Je verifie si un autre chatteur parle");
+					String text = clientSocket.getUpdate();
+					if (chatPanel.getText() != text) {
+						chatPanel.setText(text);
+					}
 				}
 			}
 		}, new Date(), 2000);
@@ -118,23 +119,32 @@ public class ChatBox {
 	}
 
 	private void connectButtonClicked() {
-		if (clientSocket.getConnexion() == null) {
-			if (ipInputField.getText().isEmpty() && portInputField.getText().isEmpty()) {
-				showMessageDialog(null, "Username and password empty", "Warning", WARNING_MESSAGE);
-			} else if (ipInputField.getText().isEmpty()) {
-				showMessageDialog(null, "Ip vide", "Warning", WARNING_MESSAGE);
-			} else if (portInputField.getText().isEmpty()) {
-				showMessageDialog(null, "Port vide", "Title", WARNING_MESSAGE);
-			} else {
+
+		if (ipInputField.getText().isEmpty() && portInputField.getText().isEmpty()) {
+			showMessageDialog(null, "Username and password empty", "Warning", WARNING_MESSAGE);
+		} else if (ipInputField.getText().isEmpty()) {
+			showMessageDialog(null, "Ip vide", "Warning", WARNING_MESSAGE);
+		} else if (portInputField.getText().isEmpty()) {
+			showMessageDialog(null, "Port vide", "Title", WARNING_MESSAGE);
+		} else {
+			if (clientSocket != null) {
 				clientSocket = new ClientSocket(currentUser, ipInputField.getText(),
 						Integer.parseInt(portInputField.getText()));
-				if(clientSocket.getConnexion()!=null) {
+				if (clientSocket.getConnexion() != null) {
 					chatPanel.setEnabled(true);
 					textInput.setEnabled(true);
 				}
 			}
+
+			clientSocket = new ClientSocket(currentUser, ipInputField.getText(),
+					Integer.parseInt(portInputField.getText()));
+			if (clientSocket.getConnexion() != null) {
+				chatPanel.setEnabled(true);
+				textInput.setEnabled(true);
+			}
 		}
 	}
+
 
 	private void sendMessage(String message) {
 		chatPanel.setText(clientSocket.sengMessage(message));
