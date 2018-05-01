@@ -28,36 +28,60 @@ public class CustomerOperation implements OperationManagement {
 	}
 
 	//TODO AJOUTER LES NOUVEAUX ARGUMENTS DU CONSTRUCTEUR POUR UTILISER
-	public BankAccount findBankAccount(int customerID, int accountType,SQLInteraction sqlInteraction)
+	public BankAccount findBankAccount(int customerID, int accountType, int savingType ,SQLInteraction sqlInteraction)
 	{
 		Vector<BankAccount> bankAccountList = getBankAccount(sqlInteraction,accountType);
 		System.out.println("Debug findBankAccount - ID:  " + customerID + " Account Type: " + accountType);
 		BankAccount bankAccountFound = null;
-		for(BankAccount b : bankAccountList)
+		
+		if(accountType == 1)
 		{
-			System.out.println("Debug findBankAccount: custID " + b.getCustomerID());
-			if(b.getCustomerID() == customerID)
+			for(BankAccount b : bankAccountList)
 			{
-				System.out.println("trouve " + b.getCustomerID());
-				bankAccountFound = b;
+				if(b.getCustomerID() == customerID)
+					bankAccountFound = b;
 			}
+		} else {
+			switch(savingType) {
+			case 1:
+				for(BankAccount b : bankAccountList)
+				{
+					if(b.getCustomerID() == customerID && b.getSavingType().equals("PEL"))
+						bankAccountFound = b;
+				}
+				break;
+			case 2:
+				for(BankAccount b : bankAccountList)
+				{
+					if(b.getCustomerID() == customerID && b.getSavingType().equals("LA"))
+						bankAccountFound = b;
+				}
+				break;
+			case 3:
+				for(BankAccount b : bankAccountList)
+				{
+					if(b.getCustomerID() == customerID && b.getSavingType().equals("AV"))
+						bankAccountFound = b;
+				}
+				break;
+			}
+			
 		}
-		System.out.println("Debug findBankAccount - ID:  " + bankAccountFound.getCustomerID() + " Account Type: " + bankAccountFound.getAccountNumber());
+		
 		return bankAccountFound;
 	}
 	
 		
-	public boolean makeOperation(double amount, int numberAccountSender, int numberAccountReceiver,SQLInteraction sqlInteraction) {
+	public boolean makeOperation(User currentUser, double amount, int numberAccountSender, int numberAccountReceiver,SQLInteraction sqlInteraction) {
 	try{
-		System.out.println("Debug makeoperation: num sender: " + numberAccountSender);
-		BankAccount bankAccount = findBankAccount(numberAccountSender,1,sqlInteraction);	
+		BankAccount bankAccount = findBankAccount(currentUser.getId(),1,0,sqlInteraction);	
 		System.out.println("Ancienne balance: " + bankAccount.balance);
 		bankAccount.balance += amount;
 		System.out.println("Nouvelle balance: " + bankAccount.balance);
 		
 		
 		String requete = "INSERT INTO operation (sender, receiver, amount, date) VALUES ("+numberAccountSender+","
-				+numberAccountReceiver+","+amount+","+dateFormat.format(date)+")";
+				+numberAccountReceiver+","+Math.abs(amount)+",'"+dateFormat.format(date)+"')";
 		
 		int rs=sqlInteraction.executeUpdate(requete);
 		if(rs == 0)

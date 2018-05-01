@@ -7,6 +7,7 @@ public abstract class BankAccount {
 	public int accountNumber;
 	public int customerID;
 	public int accountType;
+	public String savingType;
 	
 	public BankAccount(double balance, int accountNumber, int customerID, int accountType)
 	{
@@ -14,6 +15,7 @@ public abstract class BankAccount {
 		this.accountNumber = accountNumber;
 		this.customerID = customerID;
 		this.accountType = accountType;
+		this.savingType = "0";
 	}
 
 	/**
@@ -22,12 +24,26 @@ public abstract class BankAccount {
 	public double getBalance() {
 		return balance;
 	}
-
+	
 	/**
 	 * @param balance the balance to set
 	 */
 	public void setBalance(double balance) {
 		this.balance = balance;
+	}
+	
+	/**
+	 * @return the type
+	 */
+	public String getSavingType() {
+		return savingType;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setSavingType(String savingType) {
+		this.savingType = savingType;
 	}
 
 	/**
