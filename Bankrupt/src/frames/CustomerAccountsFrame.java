@@ -293,7 +293,7 @@ public class CustomerAccountsFrame extends javax.swing.JFrame {
 			if(account.getAccountType()==Values.currentAccountType) {
 				model[0]=(Values.currentAccount);
 			}else {
-				model[0]=(String.valueOf(account.getAccountType()));
+				model[0]=account.getSavingType();
 			}
 			model[1]=(String.valueOf(account.getAccountNumber()));
 			model[2]= account.getBalance();
