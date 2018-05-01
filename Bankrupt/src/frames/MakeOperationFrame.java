@@ -63,7 +63,7 @@ public class MakeOperationFrame extends JFrame {
 			this.customerId = currentUser.getId();
 			System.out.println(this.customerId);
 			this.currentUser = currentUser;
-			this.currentBankAccount = currentUser.operationManagement.findBankAccount(customerId, 1,sqlInteraction);
+			this.currentBankAccount = currentUser.operationManagement.findBankAccount(customerId, 1,0,sqlInteraction);
 		}
 		
 		initComponentsUser();
@@ -135,14 +135,13 @@ public class MakeOperationFrame extends JFrame {
 		JButton ValideButton = new JButton("Transf\u00E9rer");
 		ValideButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				amount = Double.parseDouble(amountInput.getText());
+				amount = -Double.parseDouble(amountInput.getText());
 				System.out.println("Montant sans oppose: " + amount);
-				amount = Math.abs(amount);
 				System.out.println("Montant avec oppose: " + amount);
 				
 				numberAccountReceiver = Integer.parseInt(receiverAccountInput.getText());
 				System.out.println("Numero cc: " + currentBankAccount.getAccountNumber());
-				boolean transfertResult = currentUser.operationManagement.makeOperation(amount, currentBankAccount.getAccountNumber(), numberAccountReceiver,sqlInteraction);
+				boolean transfertResult = currentUser.operationManagement.makeOperation(currentUser, amount, currentBankAccount.getAccountNumber(), numberAccountReceiver,sqlInteraction);
 				if(!transfertResult)
 					showMessageDialog(null, "Transfert impossible", "Warning", WARNING_MESSAGE);
 				else
