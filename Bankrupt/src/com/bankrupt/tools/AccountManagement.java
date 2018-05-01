@@ -9,7 +9,7 @@ import com.bankrupt.user.User;
 
 public interface AccountManagement {
 	public void addUser(String firstName, String lastName, String mail, String address, String password, int role, int councillorId,SQLInteraction sqlInteraction);
-	User deleteAccount(User usrToDelete, SQLInteraction sqlInteraction);
+	public void deleteAccount(User usrToDelete, SQLInteraction sqlInteraction);
 	boolean addBankAccount(User customer, int account_type, int saving_type, SQLInteraction sqlInteraction) throws SQLException;
 	BankAccount deleteBankAccount(BankAccount bankAccountToDelete, SQLInteraction sqlInteraction);
 	Vector<User> getUser(int role, SQLInteraction sqlInteraction);

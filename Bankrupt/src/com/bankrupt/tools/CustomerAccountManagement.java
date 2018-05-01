@@ -176,16 +176,36 @@ public class CustomerAccountManagement implements AccountManagement {
 			return true;
 	}
 
-	@Override
-	public BankAccount deleteBankAccount(BankAccount bankAccountToDelete, SQLInteraction sqlInteraction) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public User deleteAccount(User usrToDelete, SQLInteraction sqlInteraction) {
-		// TODO Auto-generated method stub
-		return null;
+		public void deleteAccount(User currentUser, SQLInteraction sqlInteraction) {
+		
+		BankAccount currentBankAccount = currentUser.operationManagement.findBankAccount(currentUser.getId(),1,0,sqlInteraction);
+		BankAccount savingBankAccount1 = currentUser.operationManagement.findBankAccount(currentUser.getId(),2,1,sqlInteraction);
+		BankAccount savingBankAccount2 = currentUser.operationManagement.findBankAccount(currentUser.getId(),2,2,sqlInteraction);
+		BankAccount savingBankAccount3 = currentUser.operationManagement.findBankAccount(currentUser.getId(),2,3,sqlInteraction);
+		
+		Vector<BankAccount> bankAccountList = new Vector<BankAccount>();
+		bankAccountList.add(savingBankAccount1);
+		bankAccountList.add(savingBankAccount2);
+		bankAccountList.add(savingBankAccount3);
+		
+		if(currentBankAccount != null) {
+			String requete = "DELETE from current where account_number=" + currentBankAccount.getAccountNumber();
+			int id = sqlInteraction.executeUpdate(requete);
+			requete = "DELETE from account where number=" + currentBankAccount.getAccountNumber();
+			id = sqlInteraction.executeUpdate(requete);	
+		}
+		
+		for(BankAccount b : bankAccountList) {
+			if(b != null) {
+				String requete = "DELETE from saving where account_number=" + b.getAccountNumber();
+				int id = sqlInteraction.executeUpdate(requete);
+				requete = "DELETE from account where number=" + b.getAccountNumber();
+				id = sqlInteraction.executeUpdate(requete);	
+			}
+		}
+		
+		String requete = "DELETE from user where id=" + currentUser.getId();
+		int id = sqlInteraction.executeUpdate(requete);
 	}
 
 	@Override
@@ -350,5 +370,11 @@ public class CustomerAccountManagement implements AccountManagement {
 			}
 		}
 		return vectAccounts;
+	}
+
+	@Override
+	public BankAccount deleteBankAccount(BankAccount bankAccountToDelete, SQLInteraction sqlInteraction) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

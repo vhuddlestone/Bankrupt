@@ -64,9 +64,8 @@ public class BankAccountManager implements AccountManagement {
 	}
 
 	@Override
-	public User deleteAccount(User usrToDelete, SQLInteraction sqlInteraction) {
+	public void deleteAccount(User currentUser, SQLInteraction sqlInteraction) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
