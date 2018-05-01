@@ -105,6 +105,10 @@ public class CreateBankAccountFrame extends JFrame {
 		group.add(rdbtnLivretA);
 		group.add(rdbtnAssuranceVie);
 		
+		rdbtnCompteCourant.setSelected(true);
+		account_type = 1;
+		saving_type = 0;
+		
 		frameLabel.setText("Ouverture d'un compte banquaire");
 		ValideButton.setText("Cr\u00E9er");
 		CancelButton.setText("Quitter");

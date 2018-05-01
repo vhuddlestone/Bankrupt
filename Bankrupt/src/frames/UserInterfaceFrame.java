@@ -76,38 +76,6 @@ public class UserInterfaceFrame extends JFrame {
 		}
 
 	}
-
-	void deleteAccount() {
-		
-		BankAccount currentBankAccount = currentUser.operationManagement.findBankAccount(currentUser.getId(),1,0,sqlInteraction);
-		BankAccount savingBankAccount1 = currentUser.operationManagement.findBankAccount(currentUser.getId(),2,1,sqlInteraction);
-		BankAccount savingBankAccount2 = currentUser.operationManagement.findBankAccount(currentUser.getId(),2,2,sqlInteraction);
-		BankAccount savingBankAccount3 = currentUser.operationManagement.findBankAccount(currentUser.getId(),2,3,sqlInteraction);
-		
-		Vector<BankAccount> bankAccountList = new Vector<BankAccount>();
-		bankAccountList.add(savingBankAccount1);
-		bankAccountList.add(savingBankAccount2);
-		bankAccountList.add(savingBankAccount3);
-		
-		if(currentBankAccount != null) {
-			String requete = "DELETE from current where account_number=" + currentBankAccount.getAccountNumber();
-			int id = sqlInteraction.executeUpdate(requete);
-			requete = "DELETE from account where number=" + currentBankAccount.getAccountNumber();
-			id = sqlInteraction.executeUpdate(requete);	
-		}
-		
-		for(BankAccount b : bankAccountList) {
-			if(b != null) {
-				String requete = "DELETE from saving where account_number=" + b.getAccountNumber();
-				int id = sqlInteraction.executeUpdate(requete);
-				requete = "DELETE from account where number=" + b.getAccountNumber();
-				id = sqlInteraction.executeUpdate(requete);	
-			}
-		}
-		
-		String requete = "DELETE from user where id=" + currentUser.getId();
-		int id = sqlInteraction.executeUpdate(requete);
-	}
 	
 	private void initComponentsUser() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -166,7 +134,7 @@ public class UserInterfaceFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int delete = JOptionPane.showConfirmDialog(null, "Voulez-vous vraiment supprimer votre compte ?","Warning",JOptionPane.YES_NO_OPTION);
 				if(delete == JOptionPane.YES_OPTION) {
-					deleteAccount();
+					currentUser.accountManagement.deleteAccount(currentUser,sqlInteraction);
 					dispose();
 					showMessageDialog(null, "Bye bye !", "Warning", WARNING_MESSAGE);
 					LoginFrame frame = new LoginFrame(sqlInteraction);
