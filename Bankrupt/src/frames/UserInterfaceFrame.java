@@ -31,6 +31,10 @@ import java.awt.event.ActionEvent;
 
 public class UserInterfaceFrame extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	JLabel helloLabel = new JLabel();
 	JLabel roleLabel = new JLabel();
@@ -86,15 +90,19 @@ public class UserInterfaceFrame extends JFrame {
 		setContentPane(contentPane);
 		
 		/*Labels init*/
+		helloLabel.setBounds(81, 18, 448, 30);
 		
 		helloLabel.setText("Bonjour, " + fullName);
 		helloLabel.repaint();
 		helloLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		helloLabel.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		roleLabel.setBounds(17, 384, 91, 16);
 		
 		roleLabel.setText("Client");
 		
 		JButton createBankAccountButton = new JButton("Ouvrir un compte banquaire");
+		createBankAccountButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		createBankAccountButton.setBounds(145, 100, 342, 39);
 		createBankAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CreateBankAccountFrame frame = new CreateBankAccountFrame(currentUser, sqlInteraction);
@@ -103,6 +111,8 @@ public class UserInterfaceFrame extends JFrame {
 		});
 		
 		JButton checkBankAccountButton = new JButton("Consulter un compte banquaire");
+		checkBankAccountButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		checkBankAccountButton.setBounds(145, 140, 342, 39);
 		checkBankAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CustomerAccountsFrame frame = new CustomerAccountsFrame(currentUser,sqlInteraction);
@@ -111,6 +121,8 @@ public class UserInterfaceFrame extends JFrame {
 		});
 		
 		JButton externalTransfertButton = new JButton("Effectuer un transfert vers un compte client");
+		externalTransfertButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		externalTransfertButton.setBounds(145, 180, 342, 39);
 		externalTransfertButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(currentUser.operationManagement.findBankAccount(currentUser.getId(), 1, 0, sqlInteraction) == null)
@@ -124,12 +136,16 @@ public class UserInterfaceFrame extends JFrame {
 		});
 		
 		JButton btnVirerDeLargent = new JButton("Virer de l'argent sur un compte interne");
+		btnVirerDeLargent.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnVirerDeLargent.setBounds(145, 221, 342, 39);
 		btnVirerDeLargent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		
 		JButton btnSupprimerLeCompte = new JButton("Supprimer le compte client");
+		btnSupprimerLeCompte.setBounds(145, 263, 342, 39);
+		btnSupprimerLeCompte.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnSupprimerLeCompte.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int delete = JOptionPane.showConfirmDialog(null, "Voulez-vous vraiment supprimer votre compte ?","Warning",JOptionPane.YES_NO_OPTION);
@@ -144,6 +160,8 @@ public class UserInterfaceFrame extends JFrame {
 		});
 		
 		JButton editCurrentAccount = new JButton("Modifier votre compte client");
+		editCurrentAccount.setBounds(145, 303, 342, 39);
+		editCurrentAccount.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		editCurrentAccount.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -153,6 +171,8 @@ public class UserInterfaceFrame extends JFrame {
 		});
 		
 		JButton disconnectButton = new JButton("D\u00E9connexion");
+		disconnectButton.setBounds(463, 375, 114, 35);
+		disconnectButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		disconnectButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -160,58 +180,25 @@ public class UserInterfaceFrame extends JFrame {
 				frame.setVisible(true);
 			}
 		});
+		contentPane.setLayout(null);
+		contentPane.add(roleLabel);
+		contentPane.add(disconnectButton);
+		contentPane.add(createBankAccountButton);
+		contentPane.add(checkBankAccountButton);
+		contentPane.add(externalTransfertButton);
+		contentPane.add(btnVirerDeLargent);
+		contentPane.add(btnSupprimerLeCompte);
+		contentPane.add(editCurrentAccount);
+		contentPane.add(helloLabel);
 		
-		
-		
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-							.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-								.addComponent(roleLabel, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, 327, Short.MAX_VALUE)
-								.addComponent(disconnectButton, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE)
-								.addContainerGap())
-							.addGroup(gl_contentPane.createSequentialGroup()
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-									.addComponent(createBankAccountButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(checkBankAccountButton, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(externalTransfertButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(btnVirerDeLargent, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(btnSupprimerLeCompte, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(editCurrentAccount, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addGap(158)))
-						.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-							.addComponent(helloLabel, GroupLayout.PREFERRED_SIZE, 448, GroupLayout.PREFERRED_SIZE)
-							.addGap(55))))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(helloLabel, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
-					.addGap(94)
-					.addComponent(createBankAccountButton)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(checkBankAccountButton)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(externalTransfertButton)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnVirerDeLargent)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnSupprimerLeCompte)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(editCurrentAccount)
-					.addPreferredGap(ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(roleLabel)
-						.addComponent(disconnectButton))
-					.addContainerGap())
-		);
-		contentPane.setLayout(gl_contentPane);
+		JButton btnChatter = new JButton("Chat");
+		btnChatter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ChatBox chatBox= new ChatBox(currentUser);
+			}
+		});
+		btnChatter.setBounds(144, 355, 91, 60);
+		contentPane.add(btnChatter);
 	}
 
 	private void initComponentsBanker() {
@@ -231,6 +218,8 @@ public class UserInterfaceFrame extends JFrame {
 		roleLabel.setText("Banquier");
 		
 		JButton createBankAccountButton = new JButton("Ouvrir un compte banquaire");
+		createBankAccountButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		createBankAccountButton.setBounds(145, 100, 342, 39);
 		createBankAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CreateBankAccountFrame frame = new CreateBankAccountFrame(currentUser, sqlInteraction);
@@ -239,27 +228,36 @@ public class UserInterfaceFrame extends JFrame {
 		});
 		
 		JButton checkBankAccountButton = new JButton("Consulter un compte banquaire");
+		checkBankAccountButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		checkBankAccountButton.setBounds(145, 140, 342, 39);
 		checkBankAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
 		
 		JButton externalTransfertButton = new JButton("Effectuer un transfert vers un compte client");
+		externalTransfertButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		externalTransfertButton.setBounds(145, 180, 342, 39);
 		externalTransfertButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
 		
 		JButton btnVirerDeLargent = new JButton("Virer de l'argent sur un compte interne");
+		btnVirerDeLargent.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnVirerDeLargent.setBounds(145, 220, 342, 39);
 		btnVirerDeLargent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		
 		JButton btnSupprimerLeCompte = new JButton("Supprimer le compte d'un client");
-		
+		btnSupprimerLeCompte.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnSupprimerLeCompte.setBounds(145, 260, 342, 39);
 		
 		JButton showCustomerListButton = new JButton("Consulter la liste de vos clients");
+		showCustomerListButton.setBounds(145, 260, 342, 39);
+		showCustomerListButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		showCustomerListButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UserViewFrame frame = new UserViewFrame(currentUser, sqlInteraction);
@@ -268,6 +266,8 @@ public class UserInterfaceFrame extends JFrame {
 		});
 		
 		JButton createCustomerButton = new JButton("Crï¿½er un compte client");
+		createCustomerButton.setBounds(145, 300, 342, 39);
+		createCustomerButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		createCustomerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				UserDetailsFrame frame = new UserDetailsFrame(sqlInteraction);
@@ -276,6 +276,7 @@ public class UserInterfaceFrame extends JFrame {
 		});
 		
 		JButton disconnectButton = new JButton("D\u00E9connexion");
+		disconnectButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		disconnectButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -284,71 +285,24 @@ public class UserInterfaceFrame extends JFrame {
 			}
 		});
 		
+		contentPane.setLayout(null);
+		contentPane.add(roleLabel);
+		contentPane.add(disconnectButton);
+		contentPane.add(createBankAccountButton);
+		contentPane.add(checkBankAccountButton);
+		contentPane.add(externalTransfertButton);
+		contentPane.add(btnVirerDeLargent);
+		contentPane.add(btnSupprimerLeCompte);
+		contentPane.add(createCustomerButton);
+		contentPane.add(helloLabel);
 		
-		
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(roleLabel, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 363, Short.MAX_VALUE)
-					.addComponent(disconnectButton)
-					.addContainerGap())
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(168)
-					.addComponent(btnSupprimerLeCompte, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-					.addGap(158))
-				.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-					.addGap(168)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(createCustomerButton, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(showCustomerListButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addGap(158))))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(168)
-					.addComponent(btnVirerDeLargent, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGap(158))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(168)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(createBankAccountButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-						.addComponent(checkBankAccountButton, GroupLayout.DEFAULT_SIZE, 243, Short.MAX_VALUE)
-						.addComponent(externalTransfertButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addGap(158))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(65, Short.MAX_VALUE)
-					.addComponent(helloLabel, GroupLayout.PREFERRED_SIZE, 448, GroupLayout.PREFERRED_SIZE)
-					.addGap(56))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(helloLabel, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
-					.addGap(94)
-					.addComponent(createBankAccountButton)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(checkBankAccountButton)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(externalTransfertButton)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnVirerDeLargent)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnSupprimerLeCompte)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(showCustomerListButton)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(createCustomerButton)
-					.addPreferredGap(ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(roleLabel)
-						.addComponent(disconnectButton))
-					.addContainerGap())
-		);
-		contentPane.setLayout(gl_contentPane);
+		JButton btnChatter = new JButton("Chat");
+		btnChatter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ChatBox chatBox= new ChatBox(currentUser);
+			}
+		});
+		btnChatter.setBounds(144, 355, 91, 60);
+		contentPane.add(btnChatter);
 	}
 }
