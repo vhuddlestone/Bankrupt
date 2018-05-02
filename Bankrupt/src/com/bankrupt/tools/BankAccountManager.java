@@ -8,6 +8,8 @@ import com.bankrupt.bankaccount.BankAccount;
 import com.bankrupt.bankaccount.CurrentAccount;
 import com.bankrupt.bankaccount.SavingAccount;
 import com.bankrupt.datatools.SQLInteraction;
+import com.bankrupt.user.Banker;
+import com.bankrupt.user.Customer;
 import com.bankrupt.user.User;
 
 public class BankAccountManager implements AccountManagement {
@@ -81,10 +83,41 @@ public class BankAccountManager implements AccountManagement {
 		return null;
 	}
 
-	@Override
-	public Vector<User> getUser(int role, SQLInteraction sqlInteraction) {
-		// TODO Auto-generated method stub
-		return null;
+	public Vector<User> getUser(int role, SQLInteraction sqlInteraction){
+		Vector<User> vectUser=null;
+		String requete = null;
+		
+		switch(role) {
+		case Values.customerRole:	
+			requete="SELECT * FROM user WHERE role="+Values.customerRole;
+			break;
+		case Values.bankerRole:
+			requete="SELECT * FROM user WHERE role="+Values.bankerRole;
+			break;
+		}
+
+		ResultSet rs=sqlInteraction.executeQuery(requete);
+		
+		try {
+			vectUser= new Vector<User>();
+			while(rs.next()){
+				int userId=rs.getInt("id");
+				switch(role) {
+				case Values.customerRole:
+					int councillor_id=getCouncillorIdFromClientId(userId, sqlInteraction);
+					vectUser.add(new Customer(rs.getInt("id"), rs.getString("address"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("mail"), rs.getString("password"),Values.customerRole, councillor_id));
+					break;
+				case Values.bankerRole:
+					Vector<User> customers = getClientsFromBankerId(userId, sqlInteraction);
+					vectUser.add(new Banker(userId, rs.getString("address"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), Values.bankerRole, customers));
+				break;
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return vectUser;
 	}
 
 	@Override
@@ -95,7 +128,30 @@ public class BankAccountManager implements AccountManagement {
 
 	@Override
 	public int getCouncillorIdFromClientId(int id, SQLInteraction sqlInteraction) {
-		// TODO Auto-generated method stub
-		return 0;
+		ResultSet rs=null;
+		int councillor_id= -1;
+		String requete = "SELECT councillor_id FROM customer WHERE user_id="+id;
+		
+		rs=sqlInteraction.executeQuery(requete);
+		try {
+			if(rs.next()) {
+				councillor_id= rs.getInt("councillor_id");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return councillor_id;
+	}
+
+	@Override
+	public User findUser(int userId, int role, SQLInteraction sqlInteraction) {
+		User userFound = null;
+		Vector<User> vectUser = getUser(role,sqlInteraction);
+		for(User u : vectUser) {
+			if(u.getId() == userId)
+				userFound = u;
+		}
+		return userFound;
 	}
 }

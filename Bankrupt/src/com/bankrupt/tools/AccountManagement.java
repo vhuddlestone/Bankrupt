@@ -16,4 +16,5 @@ public interface AccountManagement {
 	Vector<User> getClientsFromBankerId(int id, SQLInteraction sqlInteraction);
 	int getCouncillorIdFromClientId(int id, SQLInteraction sqlInteraction);
 	public Vector<BankAccount> getUserAccounts(User user, SQLInteraction sqlInteraction);
+	public User findUser(int userId, int role, SQLInteraction sqlInteraction);
 }

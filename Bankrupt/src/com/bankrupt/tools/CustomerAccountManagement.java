@@ -22,19 +22,30 @@ public class CustomerAccountManagement implements AccountManagement {
 		
 	}
 	
+	public User findUser(int userId, int role, SQLInteraction sqlInteraction) {
+		User userFound = null;
+		Vector<User> vectUser = getUser(role,sqlInteraction);
+		for(User u : vectUser) {
+			if(u.getId() == userId)
+			{
+				System.out.println("findUser client: trouve");
+				userFound = u;
+			}
+		}
+		return userFound;
+	}
+	
 	@Override
 	public Vector<User> getUser(int role, SQLInteraction sqlInteraction){
 		Vector<User> vectUser=null;
 		String requete = null;
 		
 		switch(role) {
-		case customerRole:	
-			requete="SELECT * FROM user WHERE role="+customerRole;
+		case Values.customerRole:	
+			requete="SELECT * FROM user WHERE role="+Values.customerRole;
 			break;
-		case adminRole:
-			break;
-		case bankerRole:
-			requete="SELECT * FROM user WHERE role="+bankerRole;
+		case Values.bankerRole:
+			requete="SELECT * FROM user WHERE role="+Values.bankerRole;
 			break;
 		}
 
@@ -45,17 +56,15 @@ public class CustomerAccountManagement implements AccountManagement {
 			while(rs.next()){
 				int userId=rs.getInt("id");
 				switch(role) {
-				case customerRole:
+				case Values.customerRole:
 					int councillor_id=getCouncillorIdFromClientId(userId, sqlInteraction);
-					//vectUser.add(new Customer(rs.getInt("id"), rs.getString("address"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("mail"), rs.getString("password"),customerRole, sqlInteraction,councillor_id));
+					vectUser.add(new Customer(rs.getInt("id"), rs.getString("address"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("mail"), rs.getString("password"),Values.customerRole, councillor_id));
 					break;
-				case bankerRole:
+				case Values.bankerRole:
+					System.out.println("getUser: cas banquier");
 					Vector<User> customers = getClientsFromBankerId(userId, sqlInteraction);
-					vectUser.add(new Banker(userId, rs.getString("address"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), bankerRole, customers));
+					vectUser.add(new Banker(userId, rs.getString("address"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), Values.bankerRole, customers));
 				break;
-				case adminRole:
-					//vectUser.add(new Banker(rs.getInt("id"), rs.getString("address"), rs.getString("firstName"), rs.getString("lastName"), rs.getString("mail"), rs.getString("password")));
-					break;
 				}
 			}
 		} catch (SQLException e) {
@@ -137,7 +146,7 @@ public class CustomerAccountManagement implements AccountManagement {
 		int customerId = customer.getId();
 		String requete = "";
 		
-		if(customer.getClass().equals(Banker.class))
+		if(customer.getRole() == Values.bankerRole)
 			return false;
 		
 		if(checkAccountIfExist(sqlInteraction,customer,account_type,saving_type))
@@ -151,7 +160,7 @@ public class CustomerAccountManagement implements AccountManagement {
 		if(rs == 0)
 			return false;
 		
-		if(account_type == 1)
+		if(account_type == Values.customerRole)
 		{
 			requete = "INSERT INTO current(account_number, credit_card_number, authorized_overdraft) VALUES ("+accountNumber+","+0+","+0+")";
 		} else {
