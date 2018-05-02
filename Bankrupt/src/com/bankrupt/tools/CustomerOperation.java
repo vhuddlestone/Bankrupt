@@ -26,8 +26,22 @@ public class CustomerOperation implements OperationManagement {
 	public CustomerOperation(){
 		
 	}
+	
+	public BankAccount findBankAccount(int accountNumber, SQLInteraction sqlInteraction)
+	{
+		Vector<BankAccount> bankAccountList = getBankAccount(sqlInteraction);
+		BankAccount bankAccountFound = null;
+		
+		for(BankAccount b : bankAccountList)
+		{
+			if(b.getAccountNumber() == accountNumber)
+				bankAccountFound = b;
+		}
+		
+		return bankAccountFound;
+	}
 
-	//TODO AJOUTER LES NOUVEAUX ARGUMENTS DU CONSTRUCTEUR POUR UTILISER
+
 	public BankAccount findBankAccount(int customerID, int accountType, int savingType ,SQLInteraction sqlInteraction)
 	{
 		Vector<BankAccount> bankAccountList = getBankAccount(sqlInteraction,accountType);
@@ -104,7 +118,51 @@ public class CustomerOperation implements OperationManagement {
 		}
 	}	
 	
-	public boolean makeInternalOperation(User currentUser, double amount, int numberAccountSender, int numberAccountReceiver, SQLInteraction sqlInteraction) {
+	public boolean makeInternalOperation(User currentUser, double amount, int numAccountSender, int senderSavingType, int senderAccountType, int numAccountReceiver, int receiverAccountType, int receiverSavingType, SQLInteraction sqlInteraction) {
+		try{
+			if(amount<0)
+				return false;
+		
+			BankAccount bankAccountSender = findBankAccount(currentUser.getId(),senderAccountType,senderSavingType,sqlInteraction);	
+			System.out.println("Balance sender avant: " + bankAccountSender.getBalance());
+			bankAccountSender.setBalance(bankAccountSender.getBalance()+(-amount));
+			System.out.println("Balance sender apres: " + bankAccountSender.getBalance());
+			
+			if(bankAccountSender.balance<0)
+				return false;
+			
+			BankAccount bankAccountReceiver = findBankAccount(currentUser.getId(),receiverAccountType,receiverSavingType,sqlInteraction);	
+			System.out.println("Balance receiver avant: " + bankAccountReceiver.getBalance());
+			bankAccountReceiver.setBalance(bankAccountReceiver.getBalance()+amount);
+			System.out.println("Balance receiver apres: " + bankAccountReceiver.getBalance());
+			
+			String requete = "INSERT INTO operation (sender, receiver, amount, date) VALUES ("+numAccountSender+","
+					+numAccountReceiver+","+Math.abs(amount)+",'"+dateFormat.format(date)+"')";
+			
+			int rs=sqlInteraction.executeUpdate(requete);
+			if(rs == 0)
+				return false;
+			
+			requete = "UPDATE account SET balance=" + bankAccountSender.getBalance() + " WHERE number=" + numAccountSender;
+			rs=sqlInteraction.executeUpdate(requete);
+			if(rs == 0)
+				return false;
+			
+			requete = "UPDATE account SET balance=" + bankAccountReceiver.getBalance() + " WHERE number=" + numAccountReceiver;
+			rs=sqlInteraction.executeUpdate(requete);
+			if(rs == 0)
+				return false;
+			else
+				return true;
+			}
+		catch(Exception e) {
+			System.out.println(e.toString());
+			return false;
+		}
+		
+	}
+	
+	/*public boolean makeInternalOperation(User currentUser, double amount, int numberAccountSender, int numberAccountReceiver, SQLInteraction sqlInteraction) {
 		try{
 			if(amount<0)
 				return false;
@@ -141,6 +199,53 @@ public class CustomerOperation implements OperationManagement {
 			System.out.println(e.toString());
 			return false;
 		}
+	}*/
+	
+	public Vector<BankAccount> getBankAccount(SQLInteraction sqlInteraction){
+		Vector<BankAccount> vectBankAccount=null;
+		vectBankAccount= new Vector<BankAccount>();
+		
+		
+		try {
+				String requeteCurrent = "SELECT A.number, A.balance, A.customer_id, A.type, C.credit_card_number, C.authorized_overdraft FROM account A LEFT JOIN current C ON A.number = C.account_number WHERE A.type=1";
+				ResultSet rsCurrent = sqlInteraction.executeQuery(requeteCurrent);
+					
+				if(rsCurrent == null)
+					return null;
+					
+				while(rsCurrent.next()) {
+					int accountNumber = rsCurrent.getInt(1);
+					double balance = rsCurrent.getDouble(2);
+					int customerID = rsCurrent.getInt(3);
+					int accountType = rsCurrent.getInt(4);
+					double creditCardNumber = rsCurrent.getDouble(5);;
+					int authorizedOverdraft = rsCurrent.getInt(6);
+					vectBankAccount.add(new CurrentAccount(balance,accountNumber,customerID,accountType,creditCardNumber,authorizedOverdraft));
+				}
+					
+				String requeteSaving = "SELECT A.number, A.balance, A.customer_id, A.type, S.interest_rate, S.type FROM account A LEFT JOIN saving S ON A.number = S.account_number WHERE A.type=2";
+				ResultSet rsSaving = sqlInteraction.executeQuery(requeteSaving);
+					
+				if(rsSaving == null)
+					return null;
+					
+				while(rsSaving.next()) {
+					int accountNumber = rsSaving.getInt(1);
+					double balance = rsSaving.getDouble(2);
+					int customerID = rsSaving.getInt(3);
+					int accountType = rsSaving.getInt(4);
+					float interestRate = rsSaving.getFloat(5);
+					String savingType = rsSaving.getString(6);
+					vectBankAccount.add(new SavingAccount(balance,accountNumber,customerID,accountType,savingType,interestRate));
+				}
+					
+		}
+		
+		 catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return vectBankAccount;
 	}
 	
 	public Vector<BankAccount> getBankAccount(SQLInteraction sqlInteraction, int type){
