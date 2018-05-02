@@ -17,7 +17,7 @@ import com.bankrupt.datatools.SQLInteraction;
 import com.bankrupt.tools.Values;
 import com.bankrupt.user.User;
 import com.mysql.fabric.xmlrpc.base.Array;
-import com.sun.org.apache.bcel.internal.generic.Select;
+
 
 public class InternalOperationFrame {
 
@@ -35,7 +35,7 @@ public class InternalOperationFrame {
 	private javax.swing.JComboBox<String> sourceAccountCombo;
 	private javax.swing.JButton virerButton;
 	
-	// usefull variables
+	// useful variables
 	private User currentUser;
 	private SQLInteraction sqlInteraction;
 	private Vector<BankAccount> accountsVect= null;;
@@ -74,7 +74,6 @@ public class InternalOperationFrame {
 	}    
 
 	private void virerButtonActionPerformed(ActionEvent evt) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -99,6 +98,8 @@ public class InternalOperationFrame {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setResizable(false);
+		frame.setVisible(true);
 		frame.setBounds(100, 100, 680, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);

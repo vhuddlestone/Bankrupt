@@ -89,7 +89,7 @@ public class UserDetailsFrame extends JFrame {
 	}
 
 	private void initComponents() {
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 394, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -222,6 +222,7 @@ public class UserDetailsFrame extends JFrame {
 	private void createOrEditUser() {
 		switch(this.type) {
 		case userDetailAddType:
+			
 			customerAccountManagement.addUser(firstNameInput.getText(), lastNameInput.getText(), mailInput.getText(), addressInput.getText(), passwordInput.getText(), 1, this.bankerId,sqlInteraction);
 			break;
 		case userDetailEditType:
@@ -229,6 +230,8 @@ public class UserDetailsFrame extends JFrame {
 			
 			if(!passwordInput.getText().equals(pwdEdited))
 				pwdEdited = MD5Encryption.encrypteString(passwordInput.getText());
+			
+			
 			
 			int retour = customerAccountManagement.editUser(this.id,firstNameInput.getText(), lastNameInput.getText(), mailInput.getText(), addressInput.getText(), pwdEdited, 1,sqlInteraction);
 				

@@ -82,7 +82,7 @@ public class UserInterfaceFrame extends JFrame {
 	}
 	
 	private void initComponentsUser() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 595, 458);
 		
 		contentPane = new JPanel();
@@ -140,7 +140,7 @@ public class UserInterfaceFrame extends JFrame {
 		btnVirerDeLargent.setBounds(145, 221, 342, 39);
 		btnVirerDeLargent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				InternalOperationFrame internalOperationFrame=new InternalOperationFrame(currentUser, sqlInteraction);
+				InternalOperationFrame internalOperationFrame = new InternalOperationFrame(currentUser, sqlInteraction);
 			}
 		});
 		
@@ -203,7 +203,7 @@ public class UserInterfaceFrame extends JFrame {
 	}
 
 	private void initComponentsBanker() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 675, 458);
 		
 		contentPane = new JPanel();
@@ -249,6 +249,7 @@ public class UserInterfaceFrame extends JFrame {
 		btnVirerDeLargent.setBounds(145, 220, 342, 39);
 		btnVirerDeLargent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 		
@@ -266,7 +267,7 @@ public class UserInterfaceFrame extends JFrame {
 			}
 		});
 		
-		JButton createCustomerButton = new JButton("Créer un compte client");
+		JButton createCustomerButton = new JButton("CrÃ©er un compte client");
 		createCustomerButton.setBounds(145, 300, 342, 39);
 		createCustomerButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		createCustomerButton.addActionListener(new ActionListener() {
