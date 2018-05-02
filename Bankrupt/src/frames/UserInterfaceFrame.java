@@ -236,12 +236,8 @@ public class UserInterfaceFrame extends JFrame {
 		checkBankAccountButton.setBounds(145, 140, 342, 39);
 		checkBankAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				checkBankAccountButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
 						UserViewFrame frame = new UserViewFrame(currentUser,sqlInteraction);
 						frame.setVisible(true);
-					}
-				});
 			}
 		});
 		
