@@ -63,21 +63,21 @@ public class CustomerOperation implements OperationManagement {
 			case "PEL":
 				for(BankAccount b : bankAccountList)
 				{
-					if(b.getCustomerID() == customerID && b.getSavingType().equals("PEL"))
+					if(b.getCustomerID() == customerID && b.getSavingType().equals("PEL") && b.getAccountType()==2)
 						bankAccountFound = b;
 				}
 				break;
 			case "LA":
 				for(BankAccount b : bankAccountList)
 				{
-					if(b.getCustomerID() == customerID && b.getSavingType().equals("LA"))
+					if(b.getCustomerID() == customerID && b.getSavingType().equals("LA") && b.getAccountType()==2)
 						bankAccountFound = b;
 				}
 				break;
 			case "AV":
 				for(BankAccount b : bankAccountList)
 				{
-					if(b.getCustomerID() == customerID && b.getSavingType().equals("AV"))
+					if(b.getCustomerID() == customerID && b.getSavingType().equals("AV") && b.getAccountType()==2)
 						bankAccountFound = b;
 				}
 				break;
@@ -132,6 +132,7 @@ public class CustomerOperation implements OperationManagement {
 			if(currentUser == null)
 				return false;
 			
+			
 			BankAccount bankAccountSender = findBankAccount(currentUser.getId(),senderAccountType,senderSavingType,sqlInteraction);	
 			System.out.println("Balance sender avant: " + bankAccountSender.getBalance());
 			bankAccountSender.setBalance(bankAccountSender.getBalance()+(-amount));
@@ -140,10 +141,14 @@ public class CustomerOperation implements OperationManagement {
 			if(bankAccountSender.balance<0)
 				return false;
 			
-			BankAccount bankAccountReceiver = findBankAccount(currentUser.getId(),receiverAccountType,receiverSavingType,sqlInteraction);	
+			BankAccount bankAccountReceiver = findBankAccount(numAccountReceiver,sqlInteraction);	
 			System.out.println("Balance receiver avant: " + bankAccountReceiver.getBalance());
 			bankAccountReceiver.setBalance(bankAccountReceiver.getBalance()+amount);
 			System.out.println("Balance receiver avant: " + bankAccountReceiver.getBalance());
+			
+			if(bankAccountSender.getAccountType() != bankAccountReceiver.getAccountType())
+				return false;
+			
 			
 			String requete = "INSERT INTO operation (sender, receiver, amount, date) VALUES ("+numAccountSender+","
 					+numAccountReceiver+","+Math.abs(amount)+",'"+dateFormat.format(date)+"')";
