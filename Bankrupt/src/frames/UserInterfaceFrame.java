@@ -204,7 +204,7 @@ public class UserInterfaceFrame extends JFrame {
 
 	private void initComponentsBanker() {
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 675, 458);
+		setBounds(100, 100, 675, 500);
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -266,7 +266,7 @@ public class UserInterfaceFrame extends JFrame {
 		btnSupprimerLeCompte.setBounds(145, 260, 342, 39);
 		
 		JButton showCustomerListButton = new JButton("Consulter la liste de vos clients");
-		showCustomerListButton.setBounds(145, 260, 342, 39);
+		showCustomerListButton.setBounds(145, 340, 342, 39);
 		showCustomerListButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		showCustomerListButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -287,7 +287,7 @@ public class UserInterfaceFrame extends JFrame {
 		
 		JButton disconnectButton = new JButton("D\u00E9connexion");
 		disconnectButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		disconnectButton.setBounds(463, 375,150,39);
+		disconnectButton.setBounds(463, 400,150,39);
 		disconnectButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -305,6 +305,7 @@ public class UserInterfaceFrame extends JFrame {
 		contentPane.add(btnVirerDeLargent);
 		contentPane.add(btnSupprimerLeCompte);
 		contentPane.add(createCustomerButton);
+		contentPane.add(showCustomerListButton);
 		contentPane.add(helloLabel);
 		
 		JButton btnChatter = new JButton("Chat");
@@ -313,7 +314,7 @@ public class UserInterfaceFrame extends JFrame {
 				ChatBox chatBox= new ChatBox(currentUser);
 			}
 		});
-		btnChatter.setBounds(144, 355, 91, 60);
+		btnChatter.setBounds(144, 400, 91, 60);
 		contentPane.add(btnChatter);
 	}
 }
