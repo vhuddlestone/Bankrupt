@@ -14,9 +14,8 @@ import com.bankrupt.tools.*;
 public class Main {
 
 	public static void main(String[] args) {
-		final CustomerOperation customerOperations = new CustomerOperation();
 		String hostName = "localhost";
-		String dbName = "Bankrupt";
+		String dbName = "Bankrupt"; 
 		String user = "root";
 		String password = "";
 		String port = "3306";

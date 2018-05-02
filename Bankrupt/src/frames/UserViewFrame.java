@@ -149,7 +149,7 @@ public class UserViewFrame extends javax.swing.JFrame {
 		        		CustomerAccountsFrame customerAccoutsFrame= new CustomerAccountsFrame(selectedCustomer, sqlInteraction);
 		        		customerAccoutsFrame.setVisible(true);
 		        	}
-		        }
+		        } 
 		    }
 
 			@Override
@@ -208,13 +208,10 @@ public class UserViewFrame extends javax.swing.JFrame {
 	private void DeleteUserButtonActionPerformed(java.awt.event.ActionEvent evt) {
 		User userTodelete= getSelectedUser();
 		if(userTodelete  !=null) {
-			String error=customerAccountManagement.deleteUser(userTodelete.getId(), sqlInteraction);
-			if(error !="") {
-				showMessageDialog(null, error, "Erreur durant la suppression", WARNING_MESSAGE);
-			}
+			currentUser.accountManagement.deleteAccount(userTodelete, sqlInteraction);
 			updateTable();
 		}else {
-			showMessageDialog(null, "Sï¿½lectionner un utilisateur dans le tableau avant d'essayer de le supprimer", "Erreur de suppression", WARNING_MESSAGE);
+			showMessageDialog(null, "Selectionner un utilisateur dans le tableau avant d'essayer de le supprimer", "Erreur de suppression", WARNING_MESSAGE);
 		}
 	}
 

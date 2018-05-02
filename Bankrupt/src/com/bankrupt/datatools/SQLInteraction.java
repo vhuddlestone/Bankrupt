@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import com.bankrupt.tools.Values;
 import com.bankrupt.user.Banker;
 import com.bankrupt.user.Customer;
 import com.bankrupt.user.User;
@@ -13,10 +14,7 @@ import com.bankrupt.user.User;
 import java.sql.ResultSet;
 
 public final class SQLInteraction {
-
-	static final int customerRole = 1;
-	static final int bankerRole = 2;
-
+	
 	String hostName;
 	String dbName;
 	String user;
@@ -58,7 +56,7 @@ public final class SQLInteraction {
 			System.out.println("VendorError: " + e.getErrorCode());
 		}
 		return rs;
-	}
+	} 
 
 	/**
 	 * @return the state
@@ -91,16 +89,16 @@ public final class SQLInteraction {
 				role = rs.getInt("role");
 				userId = rs.getInt("id");
 				switch (role) {
-				case customerRole:
+				case Values.customerRole:
 					int councillor_id = getCouncillorIdFromClientId(userId);
 					user = new Customer(userId, rs.getString("address"), rs.getString("firstName"),
-							rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), customerRole, councillor_id);
+							rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), Values.customerRole, councillor_id);
 					break;
-				case bankerRole:
+				case Values.bankerRole:
 					requete = "SELECT * FROM user WHERE user.id=" + userId;
 					Vector<User> clients = getClientsFromBankerId(userId);
 					user = new Banker(userId, rs.getString("address"), rs.getString("firstName"),
-							rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), bankerRole,
+							rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), Values.bankerRole,
 							clients);
 					break;
 				}
@@ -124,7 +122,7 @@ public final class SQLInteraction {
 			vectClients = new Vector<User>();
 			while (rs.next()) {
 				vectClients.add(new Customer(rs.getInt("id"), rs.getString("address"), rs.getString("firstName"),
-						rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), customerRole,
+						rs.getString("lastName"), rs.getString("mail"), rs.getString("password"), Values.customerRole,
 						id));
 			}
 		} catch (SQLException e) {
