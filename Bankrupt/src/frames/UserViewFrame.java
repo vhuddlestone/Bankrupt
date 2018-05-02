@@ -176,30 +176,50 @@ public class UserViewFrame extends javax.swing.JFrame {
 				
 			}
 		});
+		
+		btnTransfertInterne = new JButton();
+		btnTransfertInterne.setText("Transfert Interne");
+		btnTransfertInterne.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		btnTransfertInterne.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnTransfertInterneActionPerformed(evt);
+			}
+		});
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addGap(20)
-				.addGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
-						.addComponent(AddUserButton, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(EditButton, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(DeleteUserButton, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE))
+		layout.setHorizontalGroup(
+			layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+					.addGap(20)
+					.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(layout.createSequentialGroup()
+							.addComponent(btnTransfertInterne)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(AddUserButton, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(EditButton, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(DeleteUserButton, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE))
 						.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 899, GroupLayout.PREFERRED_SIZE))
-				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
-				.addContainerGap()
-				.addComponent(
-						jScrollPane1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(18)
-				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(DeleteUserButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-								Short.MAX_VALUE)
-						.addComponent(EditButton, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
-						.addComponent(AddUserButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-								Short.MAX_VALUE))
-				.addContainerGap()));
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		layout.setVerticalGroup(
+			layout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(layout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup()
+							.addGap(18)
+							.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(DeleteUserButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(EditButton, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+								.addComponent(AddUserButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+						.addGroup(layout.createSequentialGroup()
+							.addGap(18)
+							.addComponent(btnTransfertInterne, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap())
+		);
 		getContentPane().setLayout(layout);
 
 		pack();
@@ -239,6 +259,25 @@ public class UserViewFrame extends javax.swing.JFrame {
 				}
 			});
 			editUserFrame.setVisible(true);
+		}else {
+			showMessageDialog(null, "Sï¿½lectionnez un utilisateur du tableau ï¿½ ï¿½diter", "Impossible d'ï¿½diter", WARNING_MESSAGE);
+		}
+	}
+	
+	
+	
+	private void btnTransfertInterneActionPerformed(ActionEvent evt) {
+		User userToEdit = getSelectedUser();
+		if(userToEdit!=null) {
+			InternalOperationFrame internalOperationFrame = new InternalOperationFrame(userToEdit, sqlInteraction);
+			internalOperationFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+				@Override
+				public void windowClosed(java.awt.event.WindowEvent e) {
+					updateTable();
+					System.out.println("maj apres edit");
+				}
+			});
+			//internalOperationFrame.setVisible(true);
 		}else {
 			showMessageDialog(null, "Sï¿½lectionnez un utilisateur du tableau ï¿½ ï¿½diter", "Impossible d'ï¿½diter", WARNING_MESSAGE);
 		}
@@ -350,4 +389,5 @@ public class UserViewFrame extends javax.swing.JFrame {
 	private javax.swing.JButton DeleteUserButton;
 	private javax.swing.JTable UserTable;
 	private javax.swing.JScrollPane jScrollPane1;
+	private JButton btnTransfertInterne;
 }

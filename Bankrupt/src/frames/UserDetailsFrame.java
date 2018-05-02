@@ -160,6 +160,7 @@ public class UserDetailsFrame extends JFrame {
 				frame.setVisible(true);
 			}
 		});
+		
 		/* Gestion affichage des ï¿½lï¿½ments */
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);

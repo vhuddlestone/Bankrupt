@@ -68,7 +68,7 @@ public class UserInterfaceFrame extends JFrame {
 			fullName = firstName + " " + lastName;
 		}
 
-		initComponentsUser();
+		initComponentsBanker();
 
 		switch (userConnected.getRole()) {
 		case customerRole:
@@ -125,7 +125,7 @@ public class UserInterfaceFrame extends JFrame {
 		externalTransfertButton.setBounds(145, 180, 342, 39);
 		externalTransfertButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(currentUser.operationManagement.findBankAccount(currentUser.getId(), 1, 0, sqlInteraction) == null)
+				if(currentUser.operationManagement.findBankAccount(currentUser.getId(), 1, "0", sqlInteraction) == null)
 				{
 					showMessageDialog(null, "Vous ne poss\u00E9dez pas de compte courant", "Warning", WARNING_MESSAGE);
 					return;
@@ -212,11 +212,14 @@ public class UserInterfaceFrame extends JFrame {
 		
 		/*Labels init*/
 		
+		
+		helloLabel.setBounds(81, 18, 448, 30);
 		helloLabel.setText("Bonjour, "+fullName);
 		helloLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		helloLabel.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		
 		roleLabel.setText("Banquier");
+		roleLabel.setBounds(20, 444, 91, 16);
 		
 		JButton createBankAccountButton = new JButton("Ouvrir un compte bancaire");
 		createBankAccountButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -261,22 +264,8 @@ public class UserInterfaceFrame extends JFrame {
 			}
 		});
 		
-		JButton btnSupprimerLeCompte = new JButton("Supprimer le compte d'un client");
-		btnSupprimerLeCompte.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnSupprimerLeCompte.setBounds(145, 260, 342, 39);
-		
-		JButton showCustomerListButton = new JButton("Consulter la liste de vos clients");
-		showCustomerListButton.setBounds(145, 340, 342, 39);
-		showCustomerListButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		showCustomerListButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				UserViewFrame frame = new UserViewFrame(currentUser, sqlInteraction);
-				frame.setVisible(true);
-			}
-		});
-		
 		JButton createCustomerButton = new JButton("Cr\u00E9er un compte client");
-		createCustomerButton.setBounds(145, 300, 342, 39);
+		createCustomerButton.setBounds(145, 261, 342, 39);
 		createCustomerButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		createCustomerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -303,9 +292,7 @@ public class UserInterfaceFrame extends JFrame {
 		contentPane.add(checkBankAccountButton);
 		contentPane.add(externalTransfertButton);
 		contentPane.add(btnVirerDeLargent);
-		contentPane.add(btnSupprimerLeCompte);
 		contentPane.add(createCustomerButton);
-		contentPane.add(showCustomerListButton);
 		contentPane.add(helloLabel);
 		
 		JButton btnChatter = new JButton("Chat");

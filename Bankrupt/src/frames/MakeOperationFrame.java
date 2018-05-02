@@ -74,7 +74,7 @@ public class MakeOperationFrame extends JFrame {
 
 		switch(currentUser.getRole()) {
 		case customerRole:
-			this.currentBankAccount = currentUser.operationManagement.findBankAccount(customerId, 1,0,sqlInteraction);
+			this.currentBankAccount = currentUser.operationManagement.findBankAccount(customerId, 1,"0",sqlInteraction);
 			initComponentsUser();
 			break;
 		case bankerRole:
@@ -411,35 +411,80 @@ public class MakeOperationFrame extends JFrame {
 			return;
 		}
 		
-		if(currentBankAccount == null)
-			numberAccountSender = Integer.parseInt(customerAccountInput.getText());
 		amount = Double.parseDouble(amountInput.getText());
 		numberAccountReceiver = Integer.parseInt(receiverAccountInput.getText());
 		
-		if(!internal) 
-			transfertResult = currentUser.operationManagement.makeExternalOperation(currentUser, amount, currentBankAccount.getAccountNumber(), numberAccountReceiver,sqlInteraction);		
-		else {
-			try {
+		try {
+			
+			if(currentUser.getRole() == Values.bankerRole) {
 				
-				String requete = "SELECT number FROM account where number=" + numberAccountReceiver;
+				System.out.println("Customer Account Input: " + customerAccountInput.getText());
+				String requete = "SELECT customer_id FROM account where number=" + customerAccountInput.getText();
 				ResultSet rs = sqlInteraction.executeQuery(requete);
 				rs.next();
-				if(rs.getInt(1) == numberAccountReceiver) {
-					transfertResult = currentUser.operationManagement.makeInternalOperation(currentUser, amount, currentBankAccount.getAccountNumber(),0,1, numberAccountReceiver,1,0,sqlInteraction);
-				} else {
-					transfertResult = false;
+				System.out.println(rs.getInt(1));
+				
+				User tempUser = currentUser.accountManagement.findUser(rs.getInt(1), Values.customerRole, sqlInteraction);
+				
+				if(tempUser == null)	
+				{
+					showMessageDialog(null, "Aucun compte utilisateur existant pour ce compte", "Warning", WARNING_MESSAGE);
+					dispose();
+					return;
 				}
 				
-			} catch (SQLException e1) {
-				e1.printStackTrace();
+				System.out.println("ID de temp user obtenu: " + tempUser.getId());
+				
+				BankAccount tempBankAccount = tempUser.operationManagement.findBankAccount(tempUser.getId(),1,"0",sqlInteraction);
+				
+				if(tempBankAccount == null)
+				{
+					showMessageDialog(null, "Aucun compte courant pour cet num. de compte", "Warning", WARNING_MESSAGE);
+					dispose();
+					return;
+				}
+				
+				if(!internal) 
+					transfertResult = tempUser.operationManagement.makeExternalOperation(tempUser, amount, tempBankAccount.getAccountNumber(), numberAccountReceiver,sqlInteraction);		
+				else {
+						requete = "SELECT number FROM account where number=" + numberAccountReceiver;
+						rs = sqlInteraction.executeQuery(requete);
+						rs.next();
+						if(rs.getInt(1) == numberAccountReceiver) 
+							transfertResult = tempUser.operationManagement.makeInternalOperation(tempUser, amount, tempBankAccount.getAccountNumber(),"0",1, numberAccountReceiver,1,"0",sqlInteraction);
+						else 
+							transfertResult = false;	
+				}
 			}
+	
+			
+			if(currentUser.getRole() == Values.customerRole) {
+				
+				if(currentBankAccount == null)
+					return;
+				
+				if(!internal) 
+					transfertResult = currentUser.operationManagement.makeExternalOperation(currentUser, amount, currentBankAccount.getAccountNumber(), numberAccountReceiver,sqlInteraction);		
+				else {
+						String requete = "SELECT number FROM account where number=" + numberAccountReceiver;
+						ResultSet rs = sqlInteraction.executeQuery(requete);
+						rs.next();
+						if(rs.getInt(1) == numberAccountReceiver) 
+							transfertResult = currentUser.operationManagement.makeInternalOperation(currentUser, amount, currentBankAccount.getAccountNumber(),"0",1, numberAccountReceiver,1,"0",sqlInteraction);
+					    else 
+							transfertResult = false;
+				}
+			}
+		} catch (SQLException e1) {
+				e1.printStackTrace();
 		}
 
 		if(!transfertResult)
-			showMessageDialog(null, "Transfert impossible", "Warning", WARNING_MESSAGE);
+			showMessageDialog(null, "Transfert impossible - Verifier les informations saisies", "Warning", WARNING_MESSAGE);
 		else
 			showMessageDialog(null, "Transfert effectu\u00E9", "Information", INFORMATION_MESSAGE);
-		
-		dispose();
+			
+			dispose();
 	}
 }
+

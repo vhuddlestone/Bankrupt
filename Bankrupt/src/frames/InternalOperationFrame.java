@@ -1,5 +1,9 @@
 package frames;
 
+import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
+import static javax.swing.JOptionPane.WARNING_MESSAGE;
+import static javax.swing.JOptionPane.showMessageDialog;
+
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,7 +23,7 @@ import com.bankrupt.user.User;
 import com.mysql.fabric.xmlrpc.base.Array;
 
 
-public class InternalOperationFrame {
+public class InternalOperationFrame extends javax.swing.JFrame {
 
 	//Swing components
 	private JFrame frame;
@@ -74,6 +78,33 @@ public class InternalOperationFrame {
 	}    
 
 	private void virerButtonActionPerformed(ActionEvent evt) {
+		Vector<BankAccount> newAccountsVect = new Vector<BankAccount>();
+
+		for(BankAccount b : accountsVect)
+			newAccountsVect.add(b);
+		int sourceSelected = sourceAccountCombo.getSelectedIndex();
+		
+		BankAccount tempSourceAccount = accountsVect.get(sourceSelected);
+		
+		if(tempSourceAccount == null) {
+			showMessageDialog(null, "Erreur compte source", "Warning", WARNING_MESSAGE);
+			return;
+		}
+		
+		newAccountsVect.remove(sourceSelected);
+		int destSelected = destAccountCombo.getSelectedIndex();
+		BankAccount tempDestAccount = newAccountsVect.get(destSelected);
+			
+		if(tempDestAccount == null) {
+			showMessageDialog(null, "Erreur compte destination", "Warning", WARNING_MESSAGE);
+		}
+	
+		int amount = Integer.parseInt(amountField.getText());
+		Boolean transfertResult = currentUser.operationManagement.makeInternalOperation(currentUser, amount, tempSourceAccount.getAccountNumber(), tempSourceAccount.getSavingType(), tempSourceAccount.getAccountType(), tempDestAccount.getAccountNumber(), tempDestAccount.getAccountType(), tempDestAccount.getSavingType(), sqlInteraction);
+		if(!transfertResult)
+			showMessageDialog(null, "Transfert impossible - Verifier les informations saisies", "Warning", WARNING_MESSAGE);
+		else
+			showMessageDialog(null, "Transfert effectu\u00E9", "Information", INFORMATION_MESSAGE);
 	}
 
 	private void updateDestinationCombobox() {
@@ -154,6 +185,7 @@ public class InternalOperationFrame {
         virerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 virerButtonActionPerformed(evt);
+                frame.dispose();
             }
         });
 

@@ -285,7 +285,7 @@ public class CreateBankAccountFrame extends JFrame {
 			if(!result)
 				switch(currentUser.getRole()) {
 				case Values.customerRole:
-					showMessageDialog(null, "Vous poss\u00E9dez d\u00E9j\u00e0 un compte", "Warning", WARNING_MESSAGE);
+					showMessageDialog(null, "Vous poss\u00E9dez d\u00E9j\u00e0 un compte", "Warning", WARNING_MESSAGE);
 					break;
 				case Values.bankerRole:
 					showMessageDialog(null, "Compte d\u00E9j\u00e0 ouvert !", "Warning", WARNING_MESSAGE);
@@ -295,7 +295,7 @@ public class CreateBankAccountFrame extends JFrame {
 				showMessageDialog(null, "Compte cr\u00E9\u00E9", "Information", INFORMATION_MESSAGE);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			showMessageDialog(null, "Un probl\u00E8me est survenu lors de la connexion à  la BDD. Compte non cr\u00E9\u00E9", "Warning", WARNING_MESSAGE);
+			showMessageDialog(null, "Un probl\u00E8me est survenu lors de la connexion à  la BDD. Compte non cr\u00E9\u00E9", "Warning", WARNING_MESSAGE);
 		}
 	}
 }
