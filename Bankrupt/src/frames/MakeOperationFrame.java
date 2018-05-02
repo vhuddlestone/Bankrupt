@@ -447,10 +447,10 @@ public class MakeOperationFrame extends JFrame {
 				if(!internal) 
 					transfertResult = tempUser.operationManagement.makeExternalOperation(tempUser, amount, tempBankAccount.getAccountNumber(), numberAccountReceiver,sqlInteraction);		
 				else {
-						requete = "SELECT number FROM account where number=" + numberAccountReceiver;
+						requete = "SELECT number, type FROM account where number=" + numberAccountReceiver;
 						rs = sqlInteraction.executeQuery(requete);
 						rs.next();
-						if(rs.getInt(1) == numberAccountReceiver) 
+						if(rs.getInt(1) == numberAccountReceiver && rs.getInt(2) == 1) 
 							transfertResult = tempUser.operationManagement.makeInternalOperation(tempUser, amount, tempBankAccount.getAccountNumber(),"0",1, numberAccountReceiver,1,"0",sqlInteraction);
 						else 
 							transfertResult = false;	
@@ -466,10 +466,10 @@ public class MakeOperationFrame extends JFrame {
 				if(!internal) 
 					transfertResult = currentUser.operationManagement.makeExternalOperation(currentUser, amount, currentBankAccount.getAccountNumber(), numberAccountReceiver,sqlInteraction);		
 				else {
-						String requete = "SELECT number FROM account where number=" + numberAccountReceiver;
+						String requete = "SELECT number, type FROM account where number=" + numberAccountReceiver;
 						ResultSet rs = sqlInteraction.executeQuery(requete);
 						rs.next();
-						if(rs.getInt(1) == numberAccountReceiver) 
+						if(rs.getInt(1) == numberAccountReceiver && rs.getInt(2) == 1) 
 							transfertResult = currentUser.operationManagement.makeInternalOperation(currentUser, amount, currentBankAccount.getAccountNumber(),"0",1, numberAccountReceiver,1,"0",sqlInteraction);
 					    else 
 							transfertResult = false;
