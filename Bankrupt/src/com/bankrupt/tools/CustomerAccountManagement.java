@@ -187,10 +187,10 @@ public class CustomerAccountManagement implements AccountManagement {
 
 		public void deleteAccount(User currentUser, SQLInteraction sqlInteraction) {
 		
-		BankAccount currentBankAccount = currentUser.operationManagement.findBankAccount(currentUser.getId(),1,0,sqlInteraction);
-		BankAccount savingBankAccount1 = currentUser.operationManagement.findBankAccount(currentUser.getId(),2,1,sqlInteraction);
-		BankAccount savingBankAccount2 = currentUser.operationManagement.findBankAccount(currentUser.getId(),2,2,sqlInteraction);
-		BankAccount savingBankAccount3 = currentUser.operationManagement.findBankAccount(currentUser.getId(),2,3,sqlInteraction);
+		BankAccount currentBankAccount = currentUser.operationManagement.findBankAccount(currentUser.getId(),1,"0",sqlInteraction);
+		BankAccount savingBankAccount1 = currentUser.operationManagement.findBankAccount(currentUser.getId(),2,"PEL",sqlInteraction);
+		BankAccount savingBankAccount2 = currentUser.operationManagement.findBankAccount(currentUser.getId(),2,"AV",sqlInteraction);
+		BankAccount savingBankAccount3 = currentUser.operationManagement.findBankAccount(currentUser.getId(),2,"LA",sqlInteraction);
 		
 		Vector<BankAccount> bankAccountList = new Vector<BankAccount>();
 		bankAccountList.add(savingBankAccount1);
@@ -254,6 +254,45 @@ public class CustomerAccountManagement implements AccountManagement {
 			e.printStackTrace();
 		}
 		return councillor_id;
+	}
+	
+	/**
+	 * Function to delete an user, first checking if the user to delete have bank accounts
+	 * @param id
+	 * @return errorMessage empy if user deleted, otherwise error message to display to user.
+	 */
+	public String deleteUser(int id, SQLInteraction sqlInteraction) {
+		String errorMessage="";
+		ResultSet rs= null;
+		String requete;
+		
+		// first checking if accounts exists for this user
+		requete= "SELECT count(acc	ount.number) as NB FROM account, user WHERE user.id=account.customer_id";
+		rs= sqlInteraction.executeQuery(requete);
+		
+		/*try {
+			if(rs.next()) {
+				errorMessage +="USer already have "+ rs.getInt("NB") +"opened accounts";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}*/
+		
+		if(errorMessage.isEmpty()) {
+			rs=null;
+			requete= "DELETE FROM user WHERE id="+id;
+			int retour = sqlInteraction.executeUpdate(requete);
+			if(retour != -1) {
+				requete="DELETE FROM customer where councillor_id="+id;
+				retour=sqlInteraction.executeUpdate(requete);
+				if (retour==-1) {
+					errorMessage="\n Dele customer cover failed";
+				}
+			}else {
+				errorMessage+="\n Delete user failed";
+			}
+		}
+		return errorMessage;
 	}
 	
 	/**
