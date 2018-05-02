@@ -269,7 +269,7 @@ public class UserInterfaceFrame extends JFrame {
 		createCustomerButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		createCustomerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				UserDetailsFrame frame = new UserDetailsFrame(sqlInteraction);
+				UserDetailsFrame frame = new UserDetailsFrame(sqlInteraction, null, currentUser.getId());
 				frame.setVisible(true);
 			}
 		});

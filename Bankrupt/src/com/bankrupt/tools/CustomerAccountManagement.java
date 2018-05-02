@@ -311,26 +311,15 @@ public class CustomerAccountManagement implements AccountManagement {
 		password= MD5Encryption.encrypteString(password);
 		
 		requete = "INSERT INTO user(firstname, lastname, mail, address, password, role) VALUES ('"+firstName+"','"+lastName+"','"+mail+"','"+address+"','"+password+"',"+role+")";
-		try {
-			int id = sqlInteraction.executeUpdate(requete);
-			int userId;
+		int id = sqlInteraction.executeUpdate(requete);
+		int userId;
+		System.out.println("id a la creation "+id);
+		System.out.println("id a la creation councillor "+councillorId);
+		if(councillorId!=-1) {
+			requete = "INSERT INTO customer(councillor_id, user_id) VALUES ("+councillorId+","+id+")";
+			id = sqlInteraction.executeUpdate(requete);
 			System.out.println(id);
-			if(councillorId!=-1) {
-				requete = "SELECT MAX(id) FROM user";
-				ResultSet rs=sqlInteraction.executeQuery(requete);
-				rs.next();
-				userId = rs.getInt(1);
-				System.out.println("userId:="+userId);
-				requete = "INSERT INTO customer(councillor_id, user_id) VALUES ("+councillorId+","+userId+")";
-				id = sqlInteraction.executeUpdate(requete);
-				System.out.println(id);
-			}
-		} catch (SQLException e) {
-			System.out.println("SQLException: " + e.getMessage());
-			System.out.println("SQLState: " + e.getSQLState());
-			System.out.println("VendorError: " + e.getErrorCode());
 		}
-		// TODO voir pour vÃ©rifier comment s'est passÃ© un insert dans la base donnÃ©es. voir si le rs contient la linge
 	}
 	
 	public int editUser(int userId, String firstName, String lastName, String mail, String address, String password, int role, SQLInteraction sqlInteraction) {
