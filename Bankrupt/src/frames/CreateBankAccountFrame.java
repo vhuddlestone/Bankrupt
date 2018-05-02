@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.bankrupt.datatools.SQLInteraction;
+import com.bankrupt.tools.Values;
+import com.bankrupt.user.Customer;
 import com.bankrupt.user.User;
 
 import javax.swing.JLabel;
@@ -53,6 +55,7 @@ public class CreateBankAccountFrame extends JFrame {
 	private int saving_type = 0;
 
 	private JPanel contentPane;
+	private JTextField customerIdInput;
 	
 	
 	/**
@@ -84,12 +87,12 @@ public class CreateBankAccountFrame extends JFrame {
 
 	private void initComponents() {
 		
-		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 387, 305);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-
+		
 		ButtonGroup group = new ButtonGroup();
 		JLabel frameLabel = new JLabel();
 		JButton ValideButton = new JButton();
@@ -99,6 +102,7 @@ public class CreateBankAccountFrame extends JFrame {
 		JRadioButton rdbtnComptepargnePel = new JRadioButton();
 		JRadioButton rdbtnLivretA = new JRadioButton();
 		JRadioButton rdbtnAssuranceVie = new JRadioButton();
+		
 		
 		group.add(rdbtnCompteCourant);
 		group.add(rdbtnComptepargnePel);
@@ -118,25 +122,28 @@ public class CreateBankAccountFrame extends JFrame {
 		rdbtnLivretA.setText("Compte \u00E9pargne: Livret A");
 		rdbtnAssuranceVie.setText("Assurance vie");
 		
+		
+		
 		frameLabel.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		lblSlectionnerUnType.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		
+		customerIdInput = new JTextField();
+		customerIdInput.setColumns(10);
+		if(currentUser.getRole() == Values.customerRole)
+		{
+			customerIdInput.setEnabled(false);
+			customerIdInput.setText(Integer.toString(currentUser.getId()));
+		}
+		customerIdInput.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				createAccount();
+			}
+		});
 		
 		
 		ValideButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				boolean result;
-				try {
-					System.out.println("account_type: " + account_type + "saving type: " + saving_type);
-					result = currentUser.accountManagement.addBankAccount(currentUser, account_type, saving_type, sqlInteraction);
-					if(!result)
-						showMessageDialog(null, "Vous poss\u00E9dez d\u00E9j\u00e0 un compte", "Warning", WARNING_MESSAGE);
-					else
-						showMessageDialog(null, "Compte cr\u00E9\u00E9", "Information", INFORMATION_MESSAGE);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					showMessageDialog(null, "Un probl\u00E8me est survenu lors de la connexion à  la BDD. Compte non cr\u00E9\u00E9", "Warning", WARNING_MESSAGE);
-				}
+					createAccount();
 			}
 		});
 
@@ -180,23 +187,15 @@ public class CreateBankAccountFrame extends JFrame {
 		});
 		
 		JLabel accountNumberLabel = new JLabel();
-		accountNumberLabel.setText("Numéro de compte");
+		accountNumberLabel.setText("Compte client n°:");
 		accountNumberLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(rdbtnCompteCourant)
-								.addComponent(rdbtnLivretA))
-							.addGap(26)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(rdbtnAssuranceVie, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)
-								.addComponent(rdbtnComptepargnePel)))
 						.addComponent(frameLabel)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addContainerGap()
@@ -208,8 +207,20 @@ public class CreateBankAccountFrame extends JFrame {
 							.addComponent(lblSlectionnerUnType))
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(accountNumberLabel)))
-					.addContainerGap(13, Short.MAX_VALUE))
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(accountNumberLabel)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(customerIdInput))
+								.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(rdbtnCompteCourant)
+										.addComponent(rdbtnLivretA))
+									.addGap(26)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(rdbtnAssuranceVie, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)
+										.addComponent(rdbtnComptepargnePel))))))
+					.addGap(13))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -217,7 +228,9 @@ public class CreateBankAccountFrame extends JFrame {
 					.addContainerGap()
 					.addComponent(frameLabel)
 					.addGap(18)
-					.addComponent(accountNumberLabel, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(accountNumberLabel, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
+						.addComponent(customerIdInput, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(28)
 					.addComponent(lblSlectionnerUnType)
 					.addGap(18)
@@ -235,5 +248,54 @@ public class CreateBankAccountFrame extends JFrame {
 					.addGap(102))
 		);
 		contentPane.setLayout(gl_contentPane);
+	}
+
+
+	void createAccount()
+	{
+		boolean result = false;
+		try {
+			if(customerIdInput.getText().isEmpty())
+			{
+				showMessageDialog(null, "Merci de saisir un num\u00e9ro de compte client", "Warning", WARNING_MESSAGE);
+				return;
+			}
+				
+			
+			if(currentUser.getRole() == Values.customerRole)
+				result = currentUser.accountManagement.addBankAccount(currentUser, account_type, saving_type, sqlInteraction);
+			else
+			{
+				int id = Integer.parseInt(customerIdInput.getText());
+				User tempUser = currentUser.accountManagement.findUser(id, Values.customerRole, sqlInteraction);
+				
+				if(tempUser == null) {
+					showMessageDialog(null, "Le client n'existe pas !", "Warning", WARNING_MESSAGE);
+					return;
+				}
+				
+				if(tempUser.getRole() == Values.bankerRole) {
+					showMessageDialog(null, "Vous \u00eates banquier ? Faites comme tout le monde: cr\u00e9ez un compte client", "Warning", WARNING_MESSAGE);
+					return;
+				}
+				
+				result = tempUser.accountManagement.addBankAccount(tempUser, account_type, saving_type, sqlInteraction);
+			}
+				
+			if(!result)
+				switch(currentUser.getRole()) {
+				case Values.customerRole:
+					showMessageDialog(null, "Vous poss\u00E9dez d\u00E9j\u00e0 un compte", "Warning", WARNING_MESSAGE);
+					break;
+				case Values.bankerRole:
+					showMessageDialog(null, "Compte d\u00E9j\u00e0 ouvert !", "Warning", WARNING_MESSAGE);
+				}
+				
+			else
+				showMessageDialog(null, "Compte cr\u00E9\u00E9", "Information", INFORMATION_MESSAGE);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			showMessageDialog(null, "Un probl\u00E8me est survenu lors de la connexion à  la BDD. Compte non cr\u00E9\u00E9", "Warning", WARNING_MESSAGE);
+		}
 	}
 }

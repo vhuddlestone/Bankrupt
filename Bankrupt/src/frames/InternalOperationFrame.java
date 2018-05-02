@@ -74,7 +74,6 @@ public class InternalOperationFrame {
 	}    
 
 	private void virerButtonActionPerformed(ActionEvent evt) {
-		
 	}
 
 	private void updateDestinationCombobox() {

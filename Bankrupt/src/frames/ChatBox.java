@@ -121,9 +121,9 @@ public class ChatBox {
 	private void connectButtonClicked() {
 
 		if (ipInputField.getText().isEmpty() && portInputField.getText().isEmpty()) {
-			showMessageDialog(null, "Username and password empty", "Warning", WARNING_MESSAGE);
+			showMessageDialog(null, "IP et port vides", "Warning", WARNING_MESSAGE);
 		} else if (ipInputField.getText().isEmpty()) {
-			showMessageDialog(null, "Ip vide", "Warning", WARNING_MESSAGE);
+			showMessageDialog(null, "IP vide", "Warning", WARNING_MESSAGE);
 		} else if (portInputField.getText().isEmpty()) {
 			showMessageDialog(null, "Port vide", "Title", WARNING_MESSAGE);
 		} else {
