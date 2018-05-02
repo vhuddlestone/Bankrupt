@@ -3,6 +3,8 @@ package com.bankrupt.user;
 import java.util.Vector;
 
 import com.bankrupt.datatools.SQLInteraction;
+import com.bankrupt.tools.AccountManagement;
+import com.bankrupt.tools.BankAccountManager;
 
 public class Customer extends User {
 	protected int councillor;
@@ -10,7 +12,6 @@ public class Customer extends User {
 	public Customer(int id, String address, String firstName,String lastName, String mail, String password, int role, int councillor) {
 	super(id,address,firstName, lastName, mail, password, role);
 	this.councillor=councillor;
-	
 	}
 	
 	public Customer() {
