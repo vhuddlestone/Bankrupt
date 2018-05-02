@@ -228,11 +228,17 @@ public class UserInterfaceFrame extends JFrame {
 			}
 		});
 		
-		JButton checkBankAccountButton = new JButton("Consulter un compte banquaire");
+		JButton checkBankAccountButton = new JButton("Consulter la liste de vos clients");
 		checkBankAccountButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		checkBankAccountButton.setBounds(145, 140, 342, 39);
 		checkBankAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				checkBankAccountButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						UserViewFrame frame = new UserViewFrame(currentUser,sqlInteraction);
+						frame.setVisible(true);
+					}
+				});
 			}
 		});
 		
@@ -241,6 +247,8 @@ public class UserInterfaceFrame extends JFrame {
 		externalTransfertButton.setBounds(145, 180, 342, 39);
 		externalTransfertButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				MakeOperationFrame frame = new MakeOperationFrame(currentUser,sqlInteraction);
+				frame.setVisible(true);
 			}
 		});
 		
