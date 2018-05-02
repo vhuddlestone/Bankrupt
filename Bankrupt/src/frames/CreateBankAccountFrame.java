@@ -113,7 +113,7 @@ public class CreateBankAccountFrame extends JFrame {
 		account_type = 1;
 		saving_type = 0;
 		
-		frameLabel.setText("Ouverture d'un compte banquaire");
+		frameLabel.setText("Ouverture d'un compte bancaire");
 		ValideButton.setText("Cr\u00E9er");
 		CancelButton.setText("Quitter");
 		lblSlectionnerUnType.setText("S\u00E9lectionner un type de compte");

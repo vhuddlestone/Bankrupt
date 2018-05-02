@@ -67,7 +67,7 @@ public class CustomerAccountsFrame extends javax.swing.JFrame {
         comptesLabel.setText("Vos comptes :");
 
         operationsLabel.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        operationsLabel.setText("Opérations :");
+        operationsLabel.setText("Op\u00E9rations :");
 
         accountsTable.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
         accountsTable.addMouseListener(new MouseListener(){

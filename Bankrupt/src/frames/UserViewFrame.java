@@ -290,7 +290,7 @@ public class UserViewFrame extends javax.swing.JFrame {
 		       return false;
 		    }
 		};
-		String header[] = { "id", "Nom", "Prenom", "Mot de passe", "Mail", "Addresse", "Rï¿½le" };
+		String header[] = { "id", "Nom", "Prenom", "Mot de passe", "Mail", "Addresse" };
 
 		modelTable.setColumnIdentifiers(header);
 
@@ -302,7 +302,6 @@ public class UserViewFrame extends javax.swing.JFrame {
 			model[3] = customer.getPassword();
 			model[4] = customer.getMail();
 			model[5] = customer.getAddress();
-			model[6] = customer.getRole();
 
 			modelTable.addRow(model);
 		}

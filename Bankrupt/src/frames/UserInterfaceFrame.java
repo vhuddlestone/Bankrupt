@@ -83,7 +83,7 @@ public class UserInterfaceFrame extends JFrame {
 	
 	private void initComponentsUser() {
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 595, 458);
+		setBounds(100, 100, 650, 458);
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -100,7 +100,7 @@ public class UserInterfaceFrame extends JFrame {
 		
 		roleLabel.setText("Client");
 		
-		JButton createBankAccountButton = new JButton("Ouvrir un compte banquaire");
+		JButton createBankAccountButton = new JButton("Ouvrir un compte bancaire");
 		createBankAccountButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		createBankAccountButton.setBounds(145, 100, 342, 39);
 		createBankAccountButton.addActionListener(new ActionListener() {
@@ -110,7 +110,7 @@ public class UserInterfaceFrame extends JFrame {
 			}
 		});
 		
-		JButton checkBankAccountButton = new JButton("Consulter un compte banquaire");
+		JButton checkBankAccountButton = new JButton("Consulter un compte bancaire");
 		checkBankAccountButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		checkBankAccountButton.setBounds(145, 140, 342, 39);
 		checkBankAccountButton.addActionListener(new ActionListener() {
@@ -172,7 +172,7 @@ public class UserInterfaceFrame extends JFrame {
 		});
 		
 		JButton disconnectButton = new JButton("D\u00E9connexion");
-		disconnectButton.setBounds(463, 375, 114, 35);
+		disconnectButton.setBounds(463, 375, 150, 39);
 		disconnectButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		disconnectButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -218,7 +218,7 @@ public class UserInterfaceFrame extends JFrame {
 		
 		roleLabel.setText("Banquier");
 		
-		JButton createBankAccountButton = new JButton("Ouvrir un compte banquaire");
+		JButton createBankAccountButton = new JButton("Ouvrir un compte bancaire");
 		createBankAccountButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		createBankAccountButton.setBounds(145, 100, 342, 39);
 		createBankAccountButton.addActionListener(new ActionListener() {
@@ -275,7 +275,7 @@ public class UserInterfaceFrame extends JFrame {
 			}
 		});
 		
-		JButton createCustomerButton = new JButton("Créer un compte client");
+		JButton createCustomerButton = new JButton("Cr\u00E9er un compte client");
 		createCustomerButton.setBounds(145, 300, 342, 39);
 		createCustomerButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		createCustomerButton.addActionListener(new ActionListener() {
